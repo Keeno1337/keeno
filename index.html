@@ -2349,6 +2349,7 @@ function checkVCInbox() {
 
 function openVCInbox() {
   if (!currentVCEmail) return;
+  markPopupOpen();
   const e = currentVCEmail;
 
   document.getElementById('vc-email-from').textContent = 'From: ' + e.from;
@@ -2408,6 +2409,7 @@ function acceptVCDeal() {
   vcInboxReady = false;
   currentVCEmail = null;
   closeVCInbox();
+  showPopupEarnings();
   document.getElementById('vc-inbox-badge').classList.remove('visible');
   updateFounderBadge();
   save();
@@ -2428,6 +2430,7 @@ function declineVCDeal() {
   vcInboxReady = false;
   currentVCEmail = null;
   closeVCInbox();
+  showPopupEarnings();
   document.getElementById('vc-inbox-badge').classList.remove('visible');
   save();
 }
@@ -2631,6 +2634,23 @@ function copyReferralCode() {
   }).catch(() => {});
 }
 
+// ============ POPUP EARNINGS TRACKER ============
+// Money never stops. But players need to KNOW that.
+let popupOpenCash = null;
+
+function markPopupOpen() {
+  if (popupOpenCash === null) popupOpenCash = state.cash;
+}
+
+function showPopupEarnings() {
+  if (popupOpenCash === null) return;
+  const earned = state.cash - popupOpenCash;
+  popupOpenCash = null;
+  if (earned > 1) {
+    toast(`Earned ${formatMoney(earned)} while that was open. Agents never sleep.`);
+  }
+}
+
 // ============ CASINO BONUS MODE ============
 let casinoActive = false;
 let lastCasinoCheck = Date.now();
@@ -2651,6 +2671,7 @@ function checkCasinoPopup() {
 function showCasino() {
   casinoActive = true;
   lastCasinoCheck = Date.now();
+  markPopupOpen();
   const stake = state.cash;
   document.getElementById('casino-stake-amount').textContent = formatMoney(stake);
   document.getElementById('casino-choices').style.display = '';
@@ -2696,23 +2717,27 @@ function casinoBet(choice) {
   setTimeout(() => {
     document.getElementById('casino-overlay').classList.remove('active');
     casinoActive = false;
+    showPopupEarnings();
   }, 2500);
 }
 
 function casinoSkip() {
   document.getElementById('casino-overlay').classList.remove('active');
   casinoActive = false;
+  showPopupEarnings();
   log('Walked away from the table. Smart? Or weak?');
 }
 
 // ============ CRYPTO TOKEN LAUNCH ============
 function showCryptoModal() {
   if (state.cryptoLaunched) return;
+  markPopupOpen();
   document.getElementById('crypto-overlay').classList.add('active');
 }
 
 function hideCryptoModal() {
   document.getElementById('crypto-overlay').classList.remove('active');
+  showPopupEarnings();
 }
 
 function launchCryptoToken() {
