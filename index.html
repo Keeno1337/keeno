@@ -2097,6 +2097,7 @@ let state = {
   cryptoLaunched: false,
   vcEquityGiven: 0,
   vcDeclined: [],
+  vcAccepted: [],
   // Prestige (persists across resets)
   founderGeneration: 0,
   prestigeMultiplier: 1,
@@ -2475,11 +2476,10 @@ let vcInboxReady = false;
 
 function getNextVCEmail() {
   // VC offers unlock when you hold 10% of the cash they're offering
-  const completedRounds = state.vcRounds || 0;
-
+  // Each VC can only offer once — accepted or declined, it's done
   for (let i = 0; i < VC_EMAILS.length; i++) {
-    if (i < completedRounds) continue; // already completed this round
-    if (state.vcDeclined && state.vcDeclined.includes(i)) continue; // declined, wait for next threshold
+    if (state.vcAccepted && state.vcAccepted.includes(i)) continue;
+    if (state.vcDeclined && state.vcDeclined.includes(i)) continue;
     if (state.cash >= VC_EMAILS[i].cashOffer * 0.1) {
       return { ...VC_EMAILS[i], index: i };
     }
@@ -2555,6 +2555,8 @@ function acceptVCDeal() {
   state.vcPoints += e.vcPointsGain;
   state.vcRounds++;
   state.vcEquityGiven = (state.vcEquityGiven || 0) + e.equityAsk;
+  if (!state.vcAccepted) state.vcAccepted = [];
+  state.vcAccepted.push(e.index);
 
   // Cash injection
   state.cash += e.cashOffer;
@@ -2813,6 +2815,7 @@ function acceptAcquisition() {
   state.vcRounds = 0;
   state.vcEquityGiven = 0;
   state.vcDeclined = [];
+  state.vcAccepted = [];
   state.totalClicks = 0;
   state.nftHash = null;
   state.escaped = false;
@@ -3322,6 +3325,7 @@ function load() {
       if (!state.lastLockIn) state.lastLockIn = 0;
       if (!state.vcEquityGiven) state.vcEquityGiven = 0;
       if (!state.vcDeclined) state.vcDeclined = [];
+      if (!state.vcAccepted) state.vcAccepted = [];
       if (!state.founderGeneration) state.founderGeneration = 0;
       if (!state.prestigeMultiplier) state.prestigeMultiplier = 1;
       if (!state.exitHistory) state.exitHistory = [];
