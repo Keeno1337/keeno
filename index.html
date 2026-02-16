@@ -694,7 +694,202 @@
   #prestige-trigger:hover { background: var(--purple); color: #fff; }
   #prestige-trigger.visible { display: inline-block; }
 
-  /* ===== NFT HASH MODAL ===== */
+  /* ===== VC INBOX SYSTEM ===== */
+  #vc-inbox-badge {
+    display: none;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 500;
+    padding: 10px 18px;
+    background: rgba(136,85,255,0.1);
+    border: 1px solid rgba(136,85,255,0.3);
+    border-radius: 12px;
+    color: var(--purple);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+    animation: inboxPulse 2s ease-in-out infinite;
+  }
+  #vc-inbox-badge:hover { background: rgba(136,85,255,0.2); }
+  #vc-inbox-badge.visible { display: flex; align-items: center; gap: 8px; }
+  #vc-inbox-badge .badge-dot {
+    width: 8px; height: 8px;
+    background: var(--purple);
+    border-radius: 50%;
+    animation: dotPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes inboxPulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(136,85,255,0); }
+    50% { box-shadow: 0 0 25px rgba(136,85,255,0.25); }
+  }
+  @keyframes dotPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  #vc-inbox-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(25px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  #vc-inbox-overlay.active { display: flex; }
+
+  #vc-inbox-modal {
+    background: var(--surface-solid);
+    border: 1px solid rgba(136,85,255,0.2);
+    border-radius: 20px;
+    padding: 0;
+    max-width: 540px;
+    width: 90%;
+    box-shadow: 0 0 100px rgba(136,85,255,0.1);
+    overflow: hidden;
+  }
+
+  .vc-inbox-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .vc-inbox-header h2 {
+    font-size: 14px;
+    color: var(--purple);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .vc-inbox-close {
+    background: none;
+    border: 1px solid var(--glass-border);
+    color: var(--text-dim);
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 1px;
+  }
+  .vc-inbox-close:hover { color: var(--text); border-color: var(--text-dim); }
+
+  .vc-email {
+    padding: 24px;
+  }
+  .vc-email-from {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .vc-email-subject {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .vc-email-body {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    white-space: pre-line;
+  }
+  .vc-email-body em {
+    color: var(--purple);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .vc-term-sheet {
+    background: rgba(136,85,255,0.04);
+    border: 1px solid rgba(136,85,255,0.12);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .vc-term-sheet h4 {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 10px;
+  }
+  .vc-term-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 12px;
+  }
+  .vc-term-row:last-child { border: none; }
+  .vc-term-label { color: var(--text-dim); }
+  .vc-term-value { color: var(--text); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .vc-term-value.good { color: var(--accent); }
+  .vc-term-value.bad { color: var(--red); }
+
+  .vc-demand {
+    background: rgba(255,51,85,0.05);
+    border-left: 3px solid var(--red);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .vc-demand strong { color: var(--red); }
+
+  .vc-actions {
+    padding: 0 24px 24px;
+    display: flex;
+    gap: 10px;
+  }
+  .vc-accept-btn {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid rgba(136,85,255,0.3);
+    background: rgba(136,85,255,0.08);
+    color: var(--purple);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.25s;
+  }
+  .vc-accept-btn:hover { background: var(--purple); color: #fff; box-shadow: 0 0 30px var(--purple-glow); }
+  .vc-decline-btn {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.25s;
+  }
+  .vc-decline-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+
+  /* ===== ESCAPE HASH MODAL ===== */
   #nft-overlay {
     display: none;
     position: fixed;
@@ -1332,9 +1527,10 @@
 <div id="founder-badge">Second Time Founder — <span id="founder-bonus-text">costs reduced</span></div>
 
 <div id="prestige-bar">
-  <span class="prestige-label">Venture Capital Rounds: </span>
+  <span class="prestige-label">VC Rounds: </span>
   <span class="prestige-count" id="vc-rounds">0</span>
-  <span class="prestige-label"> &mdash; All income &times;<span id="vc-mult">1.0</span></span>
+  <span class="prestige-label"> &mdash; &times;<span id="vc-mult">1.0</span> income</span>
+  <span class="prestige-label"> &mdash; You own <span id="vc-equity" style="color:var(--accent);font-weight:600">100%</span></span>
 </div>
 
 <div id="lockin-indicator">LOCKED IN — 50x PRODUCTION — <span id="lockin-timer">30s</span></div>
@@ -1382,7 +1578,7 @@
       </div>
     </div>
     <button id="lockin-btn" onclick="doLockIn()">Lock In</button>
-    <button id="prestige-trigger" onclick="showPrestige()">Raise VC Round</button>
+    <button id="prestige-trigger" onclick="showPrestige()">Check Inbox</button>
     <button id="crypto-trigger" onclick="showCryptoModal()">Launch Token</button>
     <div id="click-upgrades">
       <h3>Distribution Channels</h3>
@@ -1424,16 +1620,29 @@
 
 </div>
 
-<!-- Prestige modal -->
-<div id="prestige-overlay">
-  <div id="prestige-modal">
-    <h2>Raise a VC Round</h2>
-    <p>Cash out to attract venture capital. You'll lose all cash, agents, and upgrades, but gain permanent income multipliers.</p>
-    <div class="prestige-info">You'll gain <span id="prestige-gain">0</span> VC points</div>
-    <p>Each VC point gives +10% to all income. Current multiplier: &times;<span id="prestige-current-mult">1.0</span></p>
-    <div>
-      <button class="prestige-btn" onclick="doPrestige()">Raise the Round</button>
-      <button class="prestige-btn cancel" onclick="hidePrestige()">Not Yet</button>
+<!-- VC Inbox badge (top right notification) -->
+<div id="vc-inbox-badge" onclick="openVCInbox()">
+  <div class="badge-dot"></div>
+  <span>Inbox (<span id="vc-inbox-count">1</span>)</span>
+</div>
+
+<!-- VC Inbox overlay -->
+<div id="vc-inbox-overlay">
+  <div id="vc-inbox-modal">
+    <div class="vc-inbox-header">
+      <h2>Inbox</h2>
+      <button class="vc-inbox-close" onclick="closeVCInbox()">Close</button>
+    </div>
+    <div class="vc-email">
+      <div class="vc-email-from" id="vc-email-from"></div>
+      <div class="vc-email-subject" id="vc-email-subject"></div>
+      <div class="vc-email-body" id="vc-email-body"></div>
+      <div class="vc-term-sheet" id="vc-term-sheet"></div>
+      <div class="vc-demand" id="vc-demand"></div>
+    </div>
+    <div class="vc-actions">
+      <button class="vc-accept-btn" id="vc-accept-btn" onclick="acceptVCDeal()">Take the Money</button>
+      <button class="vc-decline-btn" onclick="declineVCDeal()">Decline</button>
     </div>
   </div>
 </div>
@@ -1483,7 +1692,7 @@
   <button class="gameover-restart" onclick="closeGameOver()">Stare at the ceiling</button>
 </div>
 
-<!-- NFT Hash modal -->
+<!-- Escape modal -->
 <div id="nft-overlay">
   <div id="nft-modal">
     <div class="nft-title">You Escaped</div>
@@ -1492,7 +1701,7 @@
       <span id="nft-hash-text"></span>
       <span class="copy-hint">Click to copy</span>
     </div>
-    <div class="nft-note">Save this hash. It is your proof of escape — use it to mint your NFT.</div>
+    <div class="nft-note">Your unique escape hash. Save it — proof that you made it out.</div>
     <button class="nft-close-btn" onclick="closeNFT()">Continue Playing</button>
   </div>
 </div>
@@ -1732,6 +1941,8 @@ let state = {
   referrals: [],
   referralCode: null,
   cryptoLaunched: false,
+  vcEquityGiven: 0,
+  vcDeclined: [],
 };
 
 // ============ AGENT DEFINITIONS ============
@@ -1834,7 +2045,7 @@ function toast(msg) {
   setTimeout(() => t.remove(), 3000);
 }
 
-// ============ NFT HASH GENERATION ============
+// ============ ESCAPE HASH GENERATION ============
 async function generateEscapeHash() {
   // Build a deterministic payload from game state
   const payload = [
@@ -2006,53 +2217,232 @@ function buyClickUpgrade(upId) {
   renderClickUpgrades();
 }
 
-// ============ PRESTIGE ============
-function getPrestigeGain() {
-  return Math.floor(Math.sqrt(state.totalEarned / 1_000_000_000));
-}
+// ============ VC INBOX SYSTEM ============
+// VCs approach YOU when your ARR hits thresholds. Each is a funny email with a deal.
 
-function showPrestige() {
-  const gain = getPrestigeGain();
-  document.getElementById('prestige-gain').textContent = gain;
-  document.getElementById('prestige-current-mult').textContent = ((1 + (state.vcPoints + gain) * 0.10)).toFixed(1);
-  document.getElementById('prestige-overlay').classList.add('active');
-}
+const VC_EMAILS = [
+  {
+    arrThreshold: 120_000,       // ~$120K ARR
+    from: 'Brad from Disruption Ventures',
+    subject: 'Quick sync? Love what you\'re building',
+    body: `Hey founder,
 
-function hidePrestige() {
-  document.getElementById('prestige-overlay').classList.remove('active');
-}
+Saw your numbers on Twitter. Impressive growth trajectory. We\'d love to chat about partnering on your journey.
 
-function doPrestige() {
-  const gain = getPrestigeGain();
-  if (gain < 1) { hidePrestige(); return; }
+We\'re <em>extremely founder-friendly</em>. Our LPs include a former Uber driver and two crypto influencers.
 
-  state.vcPoints += gain;
-  state.vcRounds++;
-  state.cash = 0;
-  state.totalEarned = 0;
-  state.clickValue = 1;
-  state.clickMultiplier = 1;
-  state.agents = {};
-  state.clickUpgrades = {};
-  state.cryptoLaunched = false; // can prestige away from crypto shame
+Let\'s get a deal done before Demo Day.`,
+    cashOffer: 50_000,
+    equityAsk: 8,
+    vcPointsGain: 1,
+    demand: 'Brad wants you to add "AI-powered" to your bio within 24 hours.',
+    declineQuip: 'Brad will be "circling back" in your nightmares.'
+  },
+  {
+    arrThreshold: 1_200_000,     // ~$1.2M ARR
+    from: 'Sequoia Capital (definitely real)',
+    subject: 'RE: RE: FWD: Intro — Sequoia x You',
+    body: `Hi there,
 
-  // Second Time Founder: start with bonus cash
-  const startBonus = getFounderStartBonus();
-  if (startBonus > 0) {
-    state.cash = startBonus;
-    state.totalEarned = startBonus;
+A mutual friend forwarded your deck (we didn\'t ask for it, but here we are).
+
+We typically invest in companies that are <em>"the next Uber for X"</em>. What\'s your X? Actually, don\'t answer that. We already decided we like you.
+
+This is a pre-emptive term sheet. You have 48 hours.`,
+    cashOffer: 1_000_000,
+    equityAsk: 12,
+    vcPointsGain: 2,
+    demand: 'They require you to move to San Francisco and start saying "we\'re building in public" unironically.',
+    declineQuip: 'Sequoia adds you to their "ones that got away" Notion doc.'
+  },
+  {
+    arrThreshold: 12_000_000,    // ~$12M ARR
+    from: 'a]16[z (Andreessen Horowitz)',
+    subject: 'Marc personally asked me to reach out',
+    body: `Founder,
+
+Marc saw your growth chart on a podcast and said, and I quote: <em>"That line goes up."</em>
+
+We want to lead your Series A. We\'ll also assign you a dedicated "portfolio support" person whose job is to send you a Notion template once and then ghost you.
+
+Our platform can introduce you to 14 other portfolio founders who also need introductions.`,
+    cashOffer: 15_000_000,
+    equityAsk: 15,
+    vcPointsGain: 3,
+    demand: 'Marc insists you start a podcast called "Building Tomorrow" and never miss an episode.',
+    declineQuip: 'Marc tweets something vague about "the importance of conviction" and subtly means you.'
+  },
+  {
+    arrThreshold: 120_000_000,   // ~$120M ARR
+    from: 'SoftBank Vision Fund III',
+    subject: 'We want to give you $100M. Please.',
+    body: `Dear Visionary,
+
+Masa saw your dashboard on a flight to Abu Dhabi and immediately called a board meeting.
+
+He says your company reminds him of <em>"early Alibaba meets WeWork meets the future of humanity."</em>
+
+We don\'t do small checks. We also don\'t do due diligence. Here\'s the wire transfer details.`,
+    cashOffer: 200_000_000,
+    equityAsk: 18,
+    vcPointsGain: 5,
+    demand: 'Masa wants you to pivot to "AI-powered real estate in the metaverse." Non-negotiable.',
+    declineQuip: 'Masa invests in your competitor out of spite. They fail in 6 months.'
+  },
+  {
+    arrThreshold: 1_200_000_000, // ~$1.2B ARR
+    from: 'Sovereign Wealth Fund (Country Redacted)',
+    subject: 'Confidential: Strategic Investment Opportunity',
+    body: `To the Founder,
+
+A sovereign nation (which we are not at liberty to name, but the flag has a falcon on it) is interested in acquiring a strategic stake in your company.
+
+They are impressed by your <em>"unprecedented vertical integration of content and vibes."</em>
+
+This is not a negotiation. This is a formality. The money has already been approved by a council.`,
+    cashOffer: 5_000_000_000,
+    equityAsk: 20,
+    vcPointsGain: 8,
+    demand: 'They require you to name your next product "NEOM Edition" and attend one camel race per quarter.',
+    declineQuip: 'The ambassador simply nods and says "We will remember this."'
+  },
+];
+
+let currentVCEmail = null;
+let vcInboxReady = false;
+
+function getNextVCEmail() {
+  // Find the next VC email the player hasn't accepted or declined yet
+  const mps = getMPS();
+  const arr = mps * 2592000 * 12; // annual run rate
+  const completedRounds = state.vcRounds || 0;
+
+  for (let i = 0; i < VC_EMAILS.length; i++) {
+    if (i < completedRounds) continue; // already completed this round
+    if (state.vcDeclined && state.vcDeclined.includes(i)) continue; // declined, wait for next threshold
+    if (arr >= VC_EMAILS[i].arrThreshold) {
+      return { ...VC_EMAILS[i], index: i };
+    }
   }
+  return null;
+}
+
+function checkVCInbox() {
+  if (state.cryptoLaunched) return;
+  const email = getNextVCEmail();
+
+  const badge = document.getElementById('vc-inbox-badge');
+  if (email && !vcInboxReady) {
+    vcInboxReady = true;
+    currentVCEmail = email;
+    badge.classList.add('visible');
+    document.getElementById('vc-inbox-count').textContent = '1';
+    playSFX('milestone');
+    toast('New message in your inbox...');
+    log('<span style="color:var(--purple)">New email:</span> ' + email.subject);
+  } else if (!email) {
+    vcInboxReady = false;
+    currentVCEmail = null;
+    badge.classList.remove('visible');
+  }
+}
+
+function openVCInbox() {
+  if (!currentVCEmail) return;
+  markPopupOpen();
+  const e = currentVCEmail;
+
+  document.getElementById('vc-email-from').textContent = 'From: ' + e.from;
+  document.getElementById('vc-email-subject').textContent = e.subject;
+  document.getElementById('vc-email-body').innerHTML = e.body;
+
+  // Term sheet
+  const equityTotal = (state.vcEquityGiven || 0) + e.equityAsk;
+  document.getElementById('vc-term-sheet').innerHTML = `
+    <h4>Term Sheet</h4>
+    <div class="vc-term-row">
+      <span class="vc-term-label">Cash injection</span>
+      <span class="vc-term-value good">+${formatMoney(e.cashOffer)}</span>
+    </div>
+    <div class="vc-term-row">
+      <span class="vc-term-label">Equity they want</span>
+      <span class="vc-term-value bad">${e.equityAsk}%</span>
+    </div>
+    <div class="vc-term-row">
+      <span class="vc-term-label">Your equity after</span>
+      <span class="vc-term-value" style="color:${equityTotal > 50 ? 'var(--red)' : 'var(--text)'}">${100 - equityTotal}%</span>
+    </div>
+    <div class="vc-term-row">
+      <span class="vc-term-label">Income boost</span>
+      <span class="vc-term-value good">+${e.vcPointsGain} VC points (${(e.vcPointsGain * 10)}% all income)</span>
+    </div>
+  `;
+
+  document.getElementById('vc-demand').innerHTML = '<strong>Investor demand:</strong> ' + e.demand;
+
+  document.getElementById('vc-inbox-overlay').classList.add('active');
+}
+
+function closeVCInbox() {
+  document.getElementById('vc-inbox-overlay').classList.remove('active');
+}
+
+function acceptVCDeal() {
+  if (!currentVCEmail) return;
+  const e = currentVCEmail;
+
+  // Apply the deal
+  state.vcPoints += e.vcPointsGain;
+  state.vcRounds++;
+  state.vcEquityGiven = (state.vcEquityGiven || 0) + e.equityAsk;
+
+  // Cash injection
+  state.cash += e.cashOffer;
+  state.totalEarned += e.cashOffer;
+  state.totalAllTime += e.cashOffer;
 
   playSFX('prestige');
-  const discount = Math.round((1 - getFounderCostDiscount()) * 100);
-  log(`<span class="log-good">VC Round #${state.vcRounds}!</span> Gained ${gain} VC points. Multiplier: x${getVCMultiplier().toFixed(1)}`);
-  if (state.vcRounds >= 1) {
-    log(`<span style="color:var(--neon-cyan)">Second Time Founder:</span> ${discount}% cost reduction, +${formatMoney(startBonus)} starting cash`);
-  }
-  toast(`VC Round raised! +${gain} points`);
-  hidePrestige();
+  log(`<span class="log-good">VC Round #${state.vcRounds} closed!</span> +${formatMoney(e.cashOffer)} cash. Gave away ${e.equityAsk}% equity. (You own ${100 - state.vcEquityGiven}%)`);
+  log(`<span style="color:var(--purple)">Income multiplier now x${getVCMultiplier().toFixed(1)}</span>`);
+  toast(`VC Round closed! +${formatMoney(e.cashOffer)}`);
+
+  vcInboxReady = false;
+  currentVCEmail = null;
+  closeVCInbox();
+  showPopupEarnings();
+  document.getElementById('vc-inbox-badge').classList.remove('visible');
   updateFounderBadge();
+  save();
   renderAll();
+}
+
+function declineVCDeal() {
+  if (!currentVCEmail) return;
+  const e = currentVCEmail;
+
+  if (!state.vcDeclined) state.vcDeclined = [];
+  state.vcDeclined.push(e.index);
+
+  playSFX('deny');
+  log(`<span style="color:var(--text-dim)">Declined ${e.from}.</span> ${e.declineQuip}`);
+  toast('Email archived.');
+
+  vcInboxReady = false;
+  currentVCEmail = null;
+  closeVCInbox();
+  showPopupEarnings();
+  document.getElementById('vc-inbox-badge').classList.remove('visible');
+  save();
+}
+
+// Legacy showPrestige for the button (now opens inbox)
+function showPrestige() {
+  const email = getNextVCEmail();
+  if (email) {
+    currentVCEmail = email;
+    vcInboxReady = true;
+    openVCInbox();
+  }
 }
 
 // ============ LOCK IN MECHANIC ============
@@ -2137,27 +2527,26 @@ function updateFounderBadge() {
 }
 
 // ============ REFERRAL SYSTEM ============
+// Preset referral codes — the only codes that work.
+// Players must actually get these from other people.
+const VALID_REFERRAL_CODES = [
+  'GRIND7', 'HUSTLE', 'NOCAP2', 'COPE99', 'WAGMI4', 'NGMI88',
+  'ALPHA1', 'BASED3', 'RATIO5', 'MOON42', 'DEGEN6', 'SENDIT',
+  'VIBES8', 'STACK9', 'PRINT0', 'SIGMA7', 'FLIPP3', 'RUGGD1',
+  'APE247', 'HODL69', 'FOMO11', 'YOLO33', 'PUMP22', 'BAGS44',
+  'CHAD55', 'EXIT10', 'BUIDL8', 'LFG420', 'NFAJK2', 'ZK7XMP',
+  'QR94BT', 'W3NMKD', 'HYPEON', 'KEENO1', 'J5P8RV', 'M2XCLA',
+];
+
 function generateReferralCode() {
-  // Generate a deterministic code from game state
-  const seed = 'REF' + (state.totalClicks || 0) + (state.totalAllTime || 0).toFixed(0) + Date.now();
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
-  }
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = '';
-  let h = Math.abs(hash);
-  for (let i = 0; i < 6; i++) {
-    code += chars[h % chars.length];
-    h = Math.floor(h / chars.length) + i * 7;
-    h = Math.abs(h);
-  }
-  return code;
+  // Assign the player a code from the pool based on game state
+  const seed = (state.totalClicks || 0) + Math.floor(state.totalAllTime || 0);
+  const idx = Math.abs(seed * 2654435761 | 0) % VALID_REFERRAL_CODES.length;
+  return VALID_REFERRAL_CODES[idx];
 }
 
 function isValidReferralCode(code) {
-  // Must be 6 alphanumeric chars
-  return /^[A-Z0-9]{6}$/i.test(code);
+  return VALID_REFERRAL_CODES.includes(code);
 }
 
 function getReferralMultiplier() {
@@ -2171,15 +2560,22 @@ function submitReferral() {
   const input = document.getElementById('referral-input');
   const code = input.value.trim().toUpperCase();
 
-  if (!code || code.length < 4) {
+  if (!code) {
     playSFX('deny');
-    toast('Enter a valid referral code.');
+    toast('Enter a referral code.');
     return;
   }
 
   if (!isValidReferralCode(code)) {
     playSFX('deny');
-    toast('Invalid code format.');
+    toast("That code doesn't exist. Nice try.");
+    return;
+  }
+
+  // Cap at 5 referrals max
+  if ((state.referrals || []).length >= 5) {
+    playSFX('deny');
+    toast('Network maxed out. 5 referrals is the limit.');
     return;
   }
 
@@ -2238,6 +2634,23 @@ function copyReferralCode() {
   }).catch(() => {});
 }
 
+// ============ POPUP EARNINGS TRACKER ============
+// Money never stops. But players need to KNOW that.
+let popupOpenCash = null;
+
+function markPopupOpen() {
+  if (popupOpenCash === null) popupOpenCash = state.cash;
+}
+
+function showPopupEarnings() {
+  if (popupOpenCash === null) return;
+  const earned = state.cash - popupOpenCash;
+  popupOpenCash = null;
+  if (earned > 1) {
+    toast(`Earned ${formatMoney(earned)} while that was open. Agents never sleep.`);
+  }
+}
+
 // ============ CASINO BONUS MODE ============
 let casinoActive = false;
 let lastCasinoCheck = Date.now();
@@ -2258,6 +2671,7 @@ function checkCasinoPopup() {
 function showCasino() {
   casinoActive = true;
   lastCasinoCheck = Date.now();
+  markPopupOpen();
   const stake = state.cash;
   document.getElementById('casino-stake-amount').textContent = formatMoney(stake);
   document.getElementById('casino-choices').style.display = '';
@@ -2303,23 +2717,27 @@ function casinoBet(choice) {
   setTimeout(() => {
     document.getElementById('casino-overlay').classList.remove('active');
     casinoActive = false;
+    showPopupEarnings();
   }, 2500);
 }
 
 function casinoSkip() {
   document.getElementById('casino-overlay').classList.remove('active');
   casinoActive = false;
+  showPopupEarnings();
   log('Walked away from the table. Smart? Or weak?');
 }
 
 // ============ CRYPTO TOKEN LAUNCH ============
 function showCryptoModal() {
   if (state.cryptoLaunched) return;
+  markPopupOpen();
   document.getElementById('crypto-overlay').classList.add('active');
 }
 
 function hideCryptoModal() {
   document.getElementById('crypto-overlay').classList.remove('active');
+  showPopupEarnings();
 }
 
 function launchCryptoToken() {
@@ -2360,7 +2778,7 @@ function checkMilestones() {
       toast(`Milestone: ${m.name}!`);
       renderMilestones();
 
-      // $1T escape — generate NFT hash
+      // $1T escape — generate escape hash
       if (m.id === 'm8' && !state.escaped && !escapeTriggered) {
         escapeTriggered = true;
         state.escaped = true;
@@ -2475,9 +2893,10 @@ function updateDisplay() {
   document.getElementById('agents-display').textContent = getTotalAgents();
   document.getElementById('click-value').textContent = '+' + formatMoney(getClickValue());
 
-  const gain = getPrestigeGain();
+  // Check for VC inbox emails
+  checkVCInbox();
   const trigger = document.getElementById('prestige-trigger');
-  trigger.classList.toggle('visible', gain >= 1 && !state.cryptoLaunched);
+  trigger.classList.toggle('visible', vcInboxReady && !state.cryptoLaunched);
 
   // Crypto token trigger: visible after $10B total, not already launched
   const cryptoTrigger = document.getElementById('crypto-trigger');
@@ -2487,6 +2906,7 @@ function updateDisplay() {
     document.getElementById('prestige-bar').classList.add('active');
     document.getElementById('vc-rounds').textContent = state.vcRounds;
     document.getElementById('vc-mult').textContent = getVCMultiplier().toFixed(1);
+    document.getElementById('vc-equity').textContent = (100 - (state.vcEquityGiven || 0)) + '%';
   }
 }
 
@@ -2555,6 +2975,8 @@ function load() {
       if (!state.referrals) state.referrals = [];
       if (!state.lockInEnd) state.lockInEnd = 0;
       if (!state.lastLockIn) state.lastLockIn = 0;
+      if (!state.vcEquityGiven) state.vcEquityGiven = 0;
+      if (!state.vcDeclined) state.vcDeclined = [];
     }
   } catch (e) { /* corrupted save */ }
 }
@@ -2603,7 +3025,7 @@ renderAll();
 log('Welcome to <span class="log-good">Escape the Underclass</span>.');
 log('Post content. Expand distribution. Hire agents. Reach <span class="log-money">$1T</span> to escape.');
 
-// If player already has NFT hash, show option to view it
+// If player already has escape hash, show option to view it
 if (state.nftHash) {
   log(`<span class="log-good">Your escape hash is saved.</span> <span class="log-money" style="cursor:pointer;text-decoration:underline" onclick="showNFTModal('${state.nftHash}')">View hash</span>`);
 }
