@@ -1650,6 +1650,7 @@
   <button class="save-btn" onclick="manualSave()">SAVE</button>
   <button class="save-btn" onclick="exportSave()">EXPORT</button>
   <button class="save-btn" onclick="importSave()">IMPORT</button>
+  <button class="save-btn" style="color:var(--red);border-color:rgba(255,50,50,0.15)" onclick="confirmNewGame()">NEW GAME</button>
 </div>
 
 <div id="app">
@@ -3362,6 +3363,13 @@ function importSave() {
     toast('Invalid save code.');
     playSFX('deny');
   }
+}
+
+function confirmNewGame() {
+  if (!confirm('Start a completely new game? This will erase ALL progress — including prestige. There is no undo.')) return;
+  if (!confirm('Seriously. Everything gone. Are you sure?')) return;
+  localStorage.removeItem(SAVE_KEY);
+  location.reload();
 }
 
 // Auto-save every 30s
