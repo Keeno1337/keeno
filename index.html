@@ -471,8 +471,30 @@
     text-transform: uppercase;
     letter-spacing: 4px;
     color: var(--text-muted);
-    margin-bottom: 20px;
+    margin-bottom: 4px;
   }
+  .store-subtitle {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    font-style: italic;
+    opacity: 0.6;
+  }
+  .store-header-row {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 14px;
+    padding: 0 18px 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .store-header-row span {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+  }
+  .store-header-row .col-cost { text-align: right; }
 
   .agent-card {
     background: var(--glass);
@@ -1942,6 +1964,12 @@
 
   <div id="store-panel">
     <h2>AI Agents</h2>
+    <div class="store-subtitle">Agents earn passive income automatically</div>
+    <div class="store-header-row">
+      <span></span>
+      <span>Agent</span>
+      <span class="col-cost">Cost</span>
+    </div>
     <div id="agent-store"></div>
   </div>
 
