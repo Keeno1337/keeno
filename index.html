@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escape the Underclass</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3a;
+    --text: #e0e0e8;
+    --text-dim: #8888aa;
+    --accent: #00ff88;
+    --accent-dim: #00aa5c;
+    --gold: #ffd700;
+    --red: #ff4466;
+    --blue: #4488ff;
+    --purple: #aa66ff;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  #header {
+    text-align: center;
+    padding: 24px 16px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  #header h1 {
+    font-size: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  #header .subtitle {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* Stats bar */
+  #stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+  }
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-value.gold { color: var(--gold); }
+  .stat-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* Main layout */
+  #main {
+    display: grid;
+    grid-template-columns: 300px 1fr 320px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: calc(100vh - 140px);
+  }
+
+  @media (max-width: 900px) {
+    #main { grid-template-columns: 1fr; }
+  }
+
+  /* Left panel - click zone */
+  #click-panel {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    border-right: 1px solid var(--border);
+  }
+
+  #deploy-btn {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    background: radial-gradient(circle at 40% 40%, #1a3a2a, #0a1a10);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+  }
+  #deploy-btn:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(0,255,136,0.2);
+  }
+  #deploy-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 0 50px rgba(0,255,136,0.4);
+  }
+  #deploy-btn .icon { font-size: 48px; }
+  #deploy-btn .label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  #deploy-btn .amount {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--gold);
+    margin-top: 4px;
+  }
+
+  .click-float {
+    position: absolute;
+    pointer-events: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--gold);
+    animation: floatUp 1s ease-out forwards;
+    z-index: 100;
+  }
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-80px); }
+  }
+
+  #click-upgrades {
+    width: 100%;
+  }
+  #click-upgrades h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .click-upgrade-btn {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .click-upgrade-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #1a2a22;
+  }
+  .click-upgrade-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .click-upgrade-btn .name { font-weight: 600; }
+  .click-upgrade-btn .cost {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--gold);
+    float: right;
+  }
+  .click-upgrade-btn .desc {
+    display: block;
+    color: var(--text-dim);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  /* Center panel - agents store */
+  #store-panel {
+    padding: 24px;
+    overflow-y: auto;
+  }
+  #store-panel h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  .agent-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .agent-card:hover:not(.locked) {
+    border-color: var(--accent);
+    background: #141420;
+  }
+  .agent-card.locked {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .agent-card.locked .agent-icon { filter: grayscale(1); }
+  .agent-card .agent-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+  .agent-info .agent-name {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .agent-info .agent-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .agent-info .agent-production {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-dim);
+    margin-top: 4px;
+  }
+  .agent-buy {
+    text-align: right;
+  }
+  .agent-buy .agent-cost {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .agent-buy .agent-owned {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* Right panel - log & milestones */
+  #right-panel {
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #milestones-panel {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    max-height: 50%;
+    overflow-y: auto;
+  }
+  #milestones-panel h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .milestone {
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    font-size: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+  .milestone.achieved {
+    border-color: var(--accent-dim);
+    background: #0a1a12;
+  }
+  .milestone .m-name {
+    font-weight: 600;
+  }
+  .milestone .m-desc {
+    color: var(--text-dim);
+    font-size: 11px;
+  }
+  .milestone .m-reward {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  #log-panel {
+    padding: 16px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  #log-panel h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  #log {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  #log .log-entry { margin-bottom: 2px; }
+  #log .log-entry .log-money { color: var(--gold); }
+  #log .log-entry .log-good { color: var(--accent); }
+
+  /* Prestige modal */
+  #prestige-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  #prestige-overlay.active { display: flex; }
+  #prestige-modal {
+    background: var(--surface);
+    border: 2px solid var(--purple);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 500px;
+    text-align: center;
+  }
+  #prestige-modal h2 {
+    font-size: 24px;
+    color: var(--purple);
+    margin-bottom: 12px;
+  }
+  #prestige-modal p {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  #prestige-modal .prestige-info {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--purple);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 12px 0;
+  }
+  .prestige-btn {
+    padding: 12px 32px;
+    border: 2px solid var(--purple);
+    background: transparent;
+    color: var(--purple);
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 6px;
+    transition: all 0.15s;
+  }
+  .prestige-btn:hover { background: var(--purple); color: #fff; }
+  .prestige-btn.cancel { border-color: var(--text-dim); color: var(--text-dim); }
+  .prestige-btn.cancel:hover { background: var(--text-dim); color: var(--bg); }
+
+  /* Prestige bar */
+  #prestige-bar {
+    display: none;
+    text-align: center;
+    padding: 8px 16px;
+    background: #1a1028;
+    border-bottom: 1px solid #3a2860;
+  }
+  #prestige-bar.active { display: block; }
+  #prestige-bar .prestige-label {
+    font-size: 11px;
+    color: var(--purple);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  #prestige-bar .prestige-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--purple);
+    font-weight: 700;
+  }
+  #prestige-trigger {
+    display: none;
+    margin: 12px auto;
+    padding: 8px 20px;
+    border: 1px solid var(--purple);
+    background: transparent;
+    color: var(--purple);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  #prestige-trigger:hover { background: var(--purple); color: #fff; }
+  #prestige-trigger.visible { display: inline-block; }
+
+  /* Notification toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 13px;
+    color: var(--accent);
+    z-index: 2000;
+    animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+  }
+  @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } }
+  @keyframes fadeOut { to { opacity: 0; } }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>Escape the Underclass</h1>
+  <div class="subtitle">Deploy AI Agents. Stack ARR. Get Out.</div>
+</div>
+
+<div id="prestige-bar">
+  <span class="prestige-label">Venture Capital Rounds: </span>
+  <span class="prestige-count" id="vc-rounds">0</span>
+  <span class="prestige-label"> &mdash; All income x<span id="vc-mult">1.0</span></span>
+</div>
+
+<div id="stats-bar">
+  <div class="stat">
+    <div class="stat-label">MRR</div>
+    <div class="stat-value" id="mrr-display">$0</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">ARR</div>
+    <div class="stat-value gold" id="arr-display">$0</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">$/sec</div>
+    <div class="stat-value" id="dps-display">$0</div>
+    <div class="stat-sub" id="dps-breakdown"></div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Total Earned</div>
+    <div class="stat-value" id="total-display">$0</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Agents Deployed</div>
+    <div class="stat-value" id="agents-display">0</div>
+  </div>
+</div>
+
+<div id="main">
+  <!-- Left: Click zone -->
+  <div id="click-panel">
+    <div id="deploy-btn" onclick="handleClick(event)">
+      <span class="icon">🤖</span>
+      <span class="label">Deploy</span>
+      <span class="amount" id="click-value">+$1</span>
+    </div>
+    <button id="prestige-trigger" onclick="showPrestige()">Raise VC Round</button>
+    <div id="click-upgrades">
+      <h3>Hustle Upgrades</h3>
+      <div id="click-upgrade-list"></div>
+    </div>
+  </div>
+
+  <!-- Center: Agent store -->
+  <div id="store-panel">
+    <h2>AI Agents</h2>
+    <div id="agent-store"></div>
+  </div>
+
+  <!-- Right: Milestones & Log -->
+  <div id="right-panel">
+    <div id="milestones-panel">
+      <h3>Milestones</h3>
+      <div id="milestone-list"></div>
+    </div>
+    <div id="log-panel">
+      <h3>Activity Log</h3>
+      <div id="log"></div>
+    </div>
+  </div>
+</div>
+
+<div id="prestige-overlay">
+  <div id="prestige-modal">
+    <h2>Raise a VC Round</h2>
+    <p>Cash out your ARR to attract venture capital. You'll lose all agents and MRR, but gain permanent income multipliers.</p>
+    <div class="prestige-info">You'll gain <span id="prestige-gain">0</span> VC points</div>
+    <p>Each VC point gives +10% to all income. Current multiplier: x<span id="prestige-current-mult">1.0</span></p>
+    <div>
+      <button class="prestige-btn" onclick="doPrestige()">Raise the Round</button>
+      <button class="prestige-btn cancel" onclick="hidePrestige()">Not Yet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ GAME STATE ============
+let state = {
+  mrr: 0,
+  totalEarned: 0,
+  totalAllTime: 0,
+  clickValue: 1,
+  clickMultiplier: 1,
+  agents: {},
+  clickUpgrades: {},
+  milestones: {},
+  vcPoints: 0,
+  vcRounds: 0,
+};
+
+// ============ AGENT DEFINITIONS ============
+const AGENTS = [
+  {
+    id: 'chatbot',
+    name: 'Customer Support Bot',
+    desc: 'A basic chatbot handling FAQ tickets. Cheap but honest work.',
+    icon: '💬',
+    iconBg: '#1a2a3a',
+    baseCost: 15,
+    baseMps: 0.1,
+    costScale: 1.15,
+    unlockAt: 0,
+  },
+  {
+    id: 'content',
+    name: 'Content Writer Agent',
+    desc: 'Generates SEO blog posts while you sleep. Quality varies.',
+    icon: '✍️',
+    iconBg: '#2a1a3a',
+    baseCost: 100,
+    baseMps: 1,
+    costScale: 1.15,
+    unlockAt: 100,
+  },
+  {
+    id: 'scraper',
+    name: 'Lead Scraper',
+    desc: 'Crawls LinkedIn and builds prospect lists. Ethically questionable.',
+    icon: '🕷️',
+    iconBg: '#3a2a1a',
+    baseCost: 1_100,
+    baseMps: 8,
+    costScale: 1.15,
+    unlockAt: 1_000,
+  },
+  {
+    id: 'sdr',
+    name: 'AI SDR',
+    desc: 'Sends cold outreach at scale. "Just following up on my last email..."',
+    icon: '📧',
+    iconBg: '#1a3a2a',
+    baseCost: 12_000,
+    baseMps: 47,
+    costScale: 1.15,
+    unlockAt: 10_000,
+  },
+  {
+    id: 'coder',
+    name: 'Vibe Coder',
+    desc: 'Ships MVP features in hours. Leaves TODOs everywhere.',
+    icon: '👨‍💻',
+    iconBg: '#2a2a3a',
+    baseCost: 130_000,
+    baseMps: 260,
+    costScale: 1.15,
+    unlockAt: 100_000,
+  },
+  {
+    id: 'analyst',
+    name: 'Data Analyst Agent',
+    desc: 'Builds dashboards and finds "insights". Loves pie charts.',
+    icon: '📊',
+    iconBg: '#3a1a2a',
+    baseCost: 1_400_000,
+    baseMps: 1_400,
+    costScale: 1.15,
+    unlockAt: 1_000_000,
+  },
+  {
+    id: 'pm',
+    name: 'AI Product Manager',
+    desc: 'Writes PRDs, creates Jira tickets, and schedules standups. No one asked for this.',
+    icon: '📋',
+    iconBg: '#1a1a3a',
+    baseCost: 20_000_000,
+    baseMps: 7_800,
+    costScale: 1.15,
+    unlockAt: 10_000_000,
+  },
+  {
+    id: 'founder',
+    name: 'AI Co-Founder',
+    desc: 'Runs an entire micro-SaaS autonomously. Wants equity.',
+    icon: '🧠',
+    iconBg: '#2a1a1a',
+    baseCost: 330_000_000,
+    baseMps: 44_000,
+    costScale: 1.15,
+    unlockAt: 100_000_000,
+  },
+  {
+    id: 'swarm',
+    name: 'Agent Swarm',
+    desc: 'A self-replicating cluster of agents. They have meetings now.',
+    icon: '🐝',
+    iconBg: '#2a3a1a',
+    baseCost: 5_100_000_000,
+    baseMps: 260_000,
+    costScale: 1.15,
+    unlockAt: 1_000_000_000,
+  },
+  {
+    id: 'agi',
+    name: 'AGI (Probably)',
+    desc: 'It passed the Turing test. It also passed your annual review.',
+    icon: '🌌',
+    iconBg: '#1a1a2a',
+    baseCost: 75_000_000_000,
+    baseMps: 1_600_000,
+    costScale: 1.15,
+    unlockAt: 10_000_000_000,
+  },
+];
+
+// ============ CLICK UPGRADES ============
+const CLICK_UPGRADES = [
+  { id: 'cursor1', name: 'Faster Typing', desc: 'Double click value', cost: 100, multiplier: 2 },
+  { id: 'cursor2', name: 'Mechanical Keyboard', desc: 'Triple click value', cost: 5_000, multiplier: 3 },
+  { id: 'cursor3', name: 'Dual Monitors', desc: '5x click value', cost: 50_000, multiplier: 5 },
+  { id: 'cursor4', name: 'Standing Desk', desc: '10x click value', cost: 500_000, multiplier: 10 },
+  { id: 'cursor5', name: 'Neuralink Beta', desc: '50x click value', cost: 50_000_000, multiplier: 50 },
+  { id: 'cursor6', name: 'Matrix Plugin', desc: '500x click value', cost: 50_000_000_000, multiplier: 500 },
+];
+
+// ============ MILESTONES ============
+const MILESTONES = [
+  { id: 'm1', name: 'First Dollar', desc: 'Earn your first $1', threshold: 1, reward: 'Unlocked the grind', multiplier: 1 },
+  { id: 'm2', name: 'Ramen Profitable', desc: 'Reach $1,000 total', threshold: 1_000, reward: '+5% all income', multiplier: 1.05 },
+  { id: 'm3', name: 'Quit Your Day Job', desc: 'Reach $100,000 total', threshold: 100_000, reward: '+10% all income', multiplier: 1.10 },
+  { id: 'm4', name: 'Default Alive', desc: 'Reach $10M total', threshold: 10_000_000, reward: '+15% all income', multiplier: 1.15 },
+  { id: 'm5', name: 'YC Interview', desc: 'Reach $100M total', threshold: 100_000_000, reward: '+20% all income', multiplier: 1.20 },
+  { id: 'm6', name: 'Series A', desc: 'Reach $1B total', threshold: 1_000_000_000, reward: '+25% all income', multiplier: 1.25 },
+  { id: 'm7', name: 'Unicorn Status', desc: 'Reach $100B total', threshold: 100_000_000_000, reward: '+30% all income', multiplier: 1.30 },
+  { id: 'm8', name: 'Escaped', desc: 'Reach $1T total', threshold: 1_000_000_000_000, reward: 'You made it.', multiplier: 1.50 },
+];
+
+// ============ HELPERS ============
+function formatMoney(n) {
+  if (n < 0) return '-' + formatMoney(-n);
+  if (n < 1000) return '$' + n.toFixed(n < 10 ? 1 : 0);
+  const units = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc'];
+  const tier = Math.min(Math.floor(Math.log10(n) / 3), units.length - 1);
+  const scaled = n / Math.pow(10, tier * 3);
+  return '$' + scaled.toFixed(scaled < 10 ? 2 : scaled < 100 ? 1 : 0) + units[tier];
+}
+
+function getAgentCost(agent) {
+  const owned = state.agents[agent.id] || 0;
+  return Math.floor(agent.baseCost * Math.pow(agent.costScale, owned));
+}
+
+function getMilestoneMultiplier() {
+  let mult = 1;
+  for (const m of MILESTONES) {
+    if (state.milestones[m.id]) mult *= m.multiplier;
+  }
+  return mult;
+}
+
+function getVCMultiplier() {
+  return 1 + state.vcPoints * 0.10;
+}
+
+function getClickValue() {
+  return state.clickValue * state.clickMultiplier * getMilestoneMultiplier() * getVCMultiplier();
+}
+
+function getMPS() {
+  let total = 0;
+  for (const agent of AGENTS) {
+    const owned = state.agents[agent.id] || 0;
+    total += owned * agent.baseMps;
+  }
+  return total * getMilestoneMultiplier() * getVCMultiplier();
+}
+
+function getTotalAgents() {
+  let total = 0;
+  for (const a of AGENTS) total += (state.agents[a.id] || 0);
+  return total;
+}
+
+function log(msg) {
+  const el = document.getElementById('log');
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  entry.innerHTML = msg;
+  el.prepend(entry);
+  // Keep only last 50
+  while (el.children.length > 50) el.removeChild(el.lastChild);
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ============ CLICK HANDLER ============
+function handleClick(e) {
+  const value = getClickValue();
+  state.mrr += value;
+  state.totalEarned += value;
+  state.totalAllTime += value;
+
+  // Float animation
+  const btn = document.getElementById('deploy-btn');
+  const rect = btn.getBoundingClientRect();
+  const float = document.createElement('div');
+  float.className = 'click-float';
+  float.textContent = '+' + formatMoney(value);
+  float.style.left = (e.clientX - rect.left - 20) + 'px';
+  float.style.top = (e.clientY - rect.top - 10) + 'px';
+  btn.appendChild(float);
+  setTimeout(() => float.remove(), 1000);
+}
+
+// ============ BUY AGENT ============
+function buyAgent(agentId) {
+  const agent = AGENTS.find(a => a.id === agentId);
+  if (!agent) return;
+  const cost = getAgentCost(agent);
+  if (state.mrr < cost) return;
+  if (state.totalAllTime < agent.unlockAt) return;
+
+  state.mrr -= cost;
+  state.agents[agent.id] = (state.agents[agent.id] || 0) + 1;
+  log(`Deployed <span class="log-good">${agent.name}</span> #${state.agents[agent.id]} for <span class="log-money">${formatMoney(cost)}</span>`);
+  renderStore();
+}
+
+// ============ BUY CLICK UPGRADE ============
+function buyClickUpgrade(upId) {
+  const up = CLICK_UPGRADES.find(u => u.id === upId);
+  if (!up || state.clickUpgrades[upId]) return;
+  if (state.mrr < up.cost) return;
+
+  state.mrr -= up.cost;
+  state.clickUpgrades[upId] = true;
+  state.clickMultiplier *= up.multiplier;
+  log(`Upgraded: <span class="log-good">${up.name}</span> — click value x${up.multiplier}`);
+  renderClickUpgrades();
+}
+
+// ============ PRESTIGE ============
+function getPrestigeGain() {
+  return Math.floor(Math.sqrt(state.totalEarned / 1_000_000_000));
+}
+
+function showPrestige() {
+  const gain = getPrestigeGain();
+  document.getElementById('prestige-gain').textContent = gain;
+  document.getElementById('prestige-current-mult').textContent = ((1 + (state.vcPoints + gain) * 0.10)).toFixed(1);
+  document.getElementById('prestige-overlay').classList.add('active');
+}
+
+function hidePrestige() {
+  document.getElementById('prestige-overlay').classList.remove('active');
+}
+
+function doPrestige() {
+  const gain = getPrestigeGain();
+  if (gain < 1) { hidePrestige(); return; }
+
+  state.vcPoints += gain;
+  state.vcRounds++;
+  state.mrr = 0;
+  state.totalEarned = 0;
+  state.clickValue = 1;
+  state.clickMultiplier = 1;
+  state.agents = {};
+  state.clickUpgrades = {};
+  // milestones persist, totalAllTime persists
+
+  log(`<span class="log-good">VC Round #${state.vcRounds}!</span> Gained ${gain} VC points. Multiplier: x${getVCMultiplier().toFixed(1)}`);
+  toast(`VC Round raised! +${gain} points`);
+  hidePrestige();
+  renderAll();
+}
+
+// ============ MILESTONES CHECK ============
+function checkMilestones() {
+  for (const m of MILESTONES) {
+    if (!state.milestones[m.id] && state.totalAllTime >= m.threshold) {
+      state.milestones[m.id] = true;
+      log(`<span class="log-good">Milestone: ${m.name}!</span> ${m.reward}`);
+      toast(`Milestone: ${m.name}!`);
+    }
+  }
+}
+
+// ============ RENDER ============
+function renderStore() {
+  const el = document.getElementById('agent-store');
+  el.innerHTML = '';
+  for (const agent of AGENTS) {
+    const cost = getAgentCost(agent);
+    const owned = state.agents[agent.id] || 0;
+    const locked = state.totalAllTime < agent.unlockAt;
+    const canBuy = state.mrr >= cost && !locked;
+
+    const card = document.createElement('div');
+    card.className = 'agent-card' + (locked ? ' locked' : '');
+    if (!locked) card.onclick = () => buyAgent(agent.id);
+
+    const production = owned > 0
+      ? `producing ${formatMoney(owned * agent.baseMps * getMilestoneMultiplier() * getVCMultiplier())}/s`
+      : `each: ${formatMoney(agent.baseMps * getMilestoneMultiplier() * getVCMultiplier())}/s`;
+
+    card.innerHTML = `
+      <div class="agent-icon" style="background:${agent.iconBg}">${locked ? '🔒' : agent.icon}</div>
+      <div class="agent-info">
+        <div class="agent-name">${locked ? '???' : agent.name}</div>
+        <div class="agent-desc">${locked ? `Unlocks at ${formatMoney(agent.unlockAt)} total earned` : agent.desc}</div>
+        <div class="agent-production">${locked ? '' : production}</div>
+      </div>
+      <div class="agent-buy">
+        <div class="agent-cost" style="color:${canBuy ? '#ffd700' : '#ff4466'}">${locked ? '🔒' : formatMoney(cost)}</div>
+        <div class="agent-owned">${locked ? '' : 'owned: ' + owned}</div>
+      </div>
+    `;
+    el.appendChild(card);
+  }
+}
+
+function renderClickUpgrades() {
+  const el = document.getElementById('click-upgrade-list');
+  el.innerHTML = '';
+  for (const up of CLICK_UPGRADES) {
+    if (state.clickUpgrades[up.id]) continue;
+    const btn = document.createElement('button');
+    btn.className = 'click-upgrade-btn';
+    btn.disabled = state.mrr < up.cost;
+    btn.onclick = () => buyClickUpgrade(up.id);
+    btn.innerHTML = `
+      <span class="name">${up.name}</span>
+      <span class="cost">${formatMoney(up.cost)}</span>
+      <span class="desc">${up.desc}</span>
+    `;
+    el.appendChild(btn);
+  }
+}
+
+function renderMilestones() {
+  const el = document.getElementById('milestone-list');
+  el.innerHTML = '';
+  for (const m of MILESTONES) {
+    const achieved = !!state.milestones[m.id];
+    const div = document.createElement('div');
+    div.className = 'milestone' + (achieved ? ' achieved' : '');
+    div.innerHTML = `
+      <div class="m-name">${achieved ? '✓ ' : ''}${m.name}</div>
+      <div class="m-desc">${m.desc}</div>
+      <div class="m-reward">${m.reward}</div>
+    `;
+    el.appendChild(div);
+  }
+}
+
+function renderAll() {
+  renderStore();
+  renderClickUpgrades();
+  renderMilestones();
+}
+
+function updateDisplay() {
+  const mps = getMPS();
+  document.getElementById('mrr-display').textContent = formatMoney(state.mrr);
+  document.getElementById('arr-display').textContent = formatMoney(state.mrr * 12);
+  document.getElementById('dps-display').textContent = formatMoney(mps);
+  document.getElementById('total-display').textContent = formatMoney(state.totalAllTime);
+  document.getElementById('agents-display').textContent = getTotalAgents();
+  document.getElementById('click-value').textContent = '+' + formatMoney(getClickValue());
+
+  // Prestige
+  const gain = getPrestigeGain();
+  const trigger = document.getElementById('prestige-trigger');
+  trigger.classList.toggle('visible', gain >= 1);
+  if (state.vcRounds > 0) {
+    document.getElementById('prestige-bar').classList.add('active');
+    document.getElementById('vc-rounds').textContent = state.vcRounds;
+    document.getElementById('vc-mult').textContent = getVCMultiplier().toFixed(1);
+  }
+}
+
+// ============ GAME LOOP ============
+let lastTick = Date.now();
+
+function tick() {
+  const now = Date.now();
+  const dt = (now - lastTick) / 1000;
+  lastTick = now;
+
+  const mps = getMPS();
+  const earned = mps * dt;
+  state.mrr += earned;
+  state.totalEarned += earned;
+  state.totalAllTime += earned;
+
+  checkMilestones();
+  updateDisplay();
+}
+
+// Render store less frequently
+setInterval(() => {
+  renderStore();
+  renderClickUpgrades();
+}, 1000);
+
+// Main loop at 30fps
+setInterval(tick, 33);
+
+// ============ SAVE / LOAD ============
+function save() {
+  localStorage.setItem('escape_underclass_save', JSON.stringify(state));
+}
+
+function load() {
+  const data = localStorage.getItem('escape_underclass_save');
+  if (data) {
+    const parsed = JSON.parse(data);
+    state = { ...state, ...parsed };
+    log('<span class="log-good">Game loaded!</span>');
+  }
+}
+
+// Auto-save every 30s
+setInterval(save, 30000);
+window.addEventListener('beforeunload', save);
+
+// ============ INIT ============
+load();
+renderAll();
+log('Welcome to <span class="log-good">Escape the Underclass</span>. Click to deploy. Buy agents. Stack ARR.');
+log('Your journey from $0 to $1T starts now.');
+</script>
+
+</body>
+</html>
