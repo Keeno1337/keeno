@@ -2474,15 +2474,13 @@ let currentVCEmail = null;
 let vcInboxReady = false;
 
 function getNextVCEmail() {
-  // Find the next VC email the player hasn't accepted or declined yet
-  const mps = getMPS();
-  const arr = mps * 2592000 * 12; // annual run rate
+  // VC offers unlock when you hold 10% of the cash they're offering
   const completedRounds = state.vcRounds || 0;
 
   for (let i = 0; i < VC_EMAILS.length; i++) {
     if (i < completedRounds) continue; // already completed this round
     if (state.vcDeclined && state.vcDeclined.includes(i)) continue; // declined, wait for next threshold
-    if (arr >= VC_EMAILS[i].arrThreshold) {
+    if (state.cash >= VC_EMAILS[i].cashOffer * 0.1) {
       return { ...VC_EMAILS[i], index: i };
     }
   }
