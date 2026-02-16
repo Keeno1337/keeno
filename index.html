@@ -2722,8 +2722,8 @@ function getExitPrestigeMultiplier() {
 }
 
 function canSellCompany() {
-  // Need at least 1 VC round and $50B+ total earned
-  return state.vcRounds >= 1 && state.totalAllTime >= 50_000_000_000 && !state.cryptoLaunched;
+  // Need at least 1 VC round and $15B+ total earned
+  return state.vcRounds >= 1 && state.totalAllTime >= 15_000_000_000 && !state.cryptoLaunched;
 }
 
 function showAcquisitionModal() {
