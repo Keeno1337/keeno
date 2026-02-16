@@ -1156,34 +1156,34 @@ let state = {
 
 // ============ AGENT DEFINITIONS ============
 const AGENTS = [
-  { id: 'chatbot', name: 'Customer Support Bot', desc: 'A basic chatbot handling FAQ tickets. Cheap but honest work.', icon: '💬', iconBg: 'rgba(20,40,60,0.5)', baseCost: 15, baseMps: 0.1, costScale: 1.15, unlockAt: 0 },
-  { id: 'content', name: 'Content Writer Agent', desc: 'Generates SEO blog posts while you sleep. Quality varies.', icon: '✍️', iconBg: 'rgba(40,20,60,0.5)', baseCost: 100, baseMps: 1, costScale: 1.15, unlockAt: 100 },
-  { id: 'scraper', name: 'Lead Scraper', desc: 'Crawls LinkedIn and builds prospect lists. Ethically questionable.', icon: '🕷️', iconBg: 'rgba(60,40,20,0.5)', baseCost: 1_100, baseMps: 8, costScale: 1.15, unlockAt: 1_000 },
+  { id: 'clipfarm', name: 'Clip Farm Bot', desc: 'Rips trending clips and reposts across 12 accounts. Algorithm loves it.', icon: '🎬', iconBg: 'rgba(60,20,50,0.5)', baseCost: 15, baseMps: 0.1, costScale: 1.15, unlockAt: 0 },
+  { id: 'ugc', name: 'UGC Creator Agent', desc: 'Churns out Reels, Shorts, and TikToks. "Hey guys, so I found this..."', icon: '📱', iconBg: 'rgba(50,20,60,0.5)', baseCost: 100, baseMps: 1, costScale: 1.15, unlockAt: 100 },
+  { id: 'promptpack', name: 'Prompt Pack Seller', desc: 'Sells "1000 ChatGPT prompts that will change your life" on Gumroad.', icon: '🧾', iconBg: 'rgba(40,40,20,0.5)', baseCost: 1_100, baseMps: 8, costScale: 1.15, unlockAt: 1_000 },
   { id: 'sdr', name: 'AI SDR', desc: '"Just following up on my last email..." Sends cold outreach at scale.', icon: '📧', iconBg: 'rgba(20,60,40,0.5)', baseCost: 12_000, baseMps: 47, costScale: 1.15, unlockAt: 10_000 },
-  { id: 'coder', name: 'Vibe Coder', desc: 'Ships MVP features in hours. Leaves TODOs everywhere.', icon: '👨‍💻', iconBg: 'rgba(40,40,60,0.5)', baseCost: 130_000, baseMps: 260, costScale: 1.15, unlockAt: 100_000 },
-  { id: 'analyst', name: 'Data Analyst Agent', desc: 'Builds dashboards and finds "insights". Loves pie charts.', icon: '📊', iconBg: 'rgba(60,20,40,0.5)', baseCost: 1_400_000, baseMps: 1_400, costScale: 1.15, unlockAt: 1_000_000 },
-  { id: 'pm', name: 'AI Product Manager', desc: 'Writes PRDs, creates Jira tickets, schedules standups. No one asked for this.', icon: '📋', iconBg: 'rgba(20,20,60,0.5)', baseCost: 20_000_000, baseMps: 7_800, costScale: 1.15, unlockAt: 10_000_000 },
-  { id: 'founder', name: 'AI Co-Founder', desc: 'Runs an entire micro-SaaS autonomously. Wants equity.', icon: '🧠', iconBg: 'rgba(40,20,20,0.5)', baseCost: 330_000_000, baseMps: 44_000, costScale: 1.15, unlockAt: 100_000_000 },
-  { id: 'swarm', name: 'Agent Swarm', desc: 'A self-replicating cluster of agents. They have meetings now.', icon: '🐝', iconBg: 'rgba(40,60,20,0.5)', baseCost: 5_100_000_000, baseMps: 260_000, costScale: 1.15, unlockAt: 1_000_000_000 },
-  { id: 'agi', name: 'AGI (Probably)', desc: 'It passed the Turing test. It also passed your annual review.', icon: '🌌', iconBg: 'rgba(20,20,40,0.5)', baseCost: 75_000_000_000, baseMps: 1_600_000, costScale: 1.15, unlockAt: 10_000_000_000 },
+  { id: 'coder', name: 'Vibe Coder', desc: 'Ships MVP features in hours. Leaves TODOs everywhere. "It works on my machine."', icon: '👨‍💻', iconBg: 'rgba(40,40,60,0.5)', baseCost: 130_000, baseMps: 260, costScale: 1.15, unlockAt: 100_000 },
+  { id: 'reseller', name: 'TCG Reseller Bot', desc: 'Snipes Pokémon cards at retail and flips on eBay. Content is the moat.', icon: '🃏', iconBg: 'rgba(60,40,20,0.5)', baseCost: 1_400_000, baseMps: 1_400, costScale: 1.15, unlockAt: 1_000_000 },
+  { id: 'livesell', name: 'Live Selling Agent', desc: 'Runs 24/7 Whatnot streams. Never sleeps. "SOLD to the phone bidder!"', icon: '🔴', iconBg: 'rgba(60,15,15,0.5)', baseCost: 20_000_000, baseMps: 7_800, costScale: 1.15, unlockAt: 10_000_000 },
+  { id: 'founder', name: 'AI Co-Founder', desc: 'Runs an entire micro-SaaS autonomously. Wants equity and a podcast.', icon: '🧠', iconBg: 'rgba(40,20,20,0.5)', baseCost: 330_000_000, baseMps: 44_000, costScale: 1.15, unlockAt: 100_000_000 },
+  { id: 'memecoin', name: 'Memecoin Launcher', desc: 'Deploys tokens, buys its own supply, rugs respectfully. "WAGMI."', icon: '🪙', iconBg: 'rgba(50,50,10,0.5)', baseCost: 5_100_000_000, baseMps: 260_000, costScale: 1.15, unlockAt: 1_000_000_000 },
+  { id: 'agi', name: 'AGI (Probably)', desc: 'It passed the Turing test, your annual review, and launched its own Roblox world.', icon: '🌌', iconBg: 'rgba(20,20,40,0.5)', baseCost: 75_000_000_000, baseMps: 1_600_000, costScale: 1.15, unlockAt: 10_000_000_000 },
 ];
 
 // ============ CLICK UPGRADES ============
 const CLICK_UPGRADES = [
-  { id: 'cursor1', name: 'Faster Typing', desc: 'Double click value', cost: 100, multiplier: 2 },
-  { id: 'cursor2', name: 'Mechanical Keyboard', desc: 'Triple click value', cost: 5_000, multiplier: 3 },
-  { id: 'cursor3', name: 'Dual Monitors', desc: '5x click value', cost: 50_000, multiplier: 5 },
-  { id: 'cursor4', name: 'Standing Desk', desc: '10x click value', cost: 500_000, multiplier: 10 },
-  { id: 'cursor5', name: 'Neuralink Beta', desc: '50x click value', cost: 50_000_000, multiplier: 50 },
-  { id: 'cursor6', name: 'Matrix Plugin', desc: '500x click value', cost: 50_000_000_000, multiplier: 500 },
+  { id: 'cursor1', name: 'Notion Template Pack', desc: 'Sell digital products on the side — 2x click', cost: 100, multiplier: 2 },
+  { id: 'cursor2', name: 'Viral Short Format', desc: 'Your Reels hit the algorithm — 3x click', cost: 5_000, multiplier: 3 },
+  { id: 'cursor3', name: 'Custom GPT Workflow', desc: 'Automate the automation — 5x click', cost: 50_000, multiplier: 5 },
+  { id: 'cursor4', name: 'Mini-Course Empire', desc: '"Learn how I make $10K/mo" — 10x click', cost: 500_000, multiplier: 10 },
+  { id: 'cursor5', name: 'Roblox World Royalties', desc: 'Passive income from virtual worlds — 50x click', cost: 50_000_000, multiplier: 50 },
+  { id: 'cursor6', name: 'Matrix Plugin', desc: 'You see the code now — 500x click', cost: 50_000_000_000, multiplier: 500 },
 ];
 
 // ============ MILESTONES ============
 const MILESTONES = [
   { id: 'm1', name: 'First Dollar', desc: 'Earn your first $1', threshold: 1, reward: 'Unlocked the grind', multiplier: 1 },
   { id: 'm2', name: 'Ramen Profitable', desc: 'Reach $1,000 total', threshold: 1_000, reward: '+5% all income', multiplier: 1.05 },
-  { id: 'm3', name: 'Quit Your Day Job', desc: 'Reach $100,000 total', threshold: 100_000, reward: '+10% all income', multiplier: 1.10 },
-  { id: 'm4', name: 'Default Alive', desc: 'Reach $10M total', threshold: 10_000_000, reward: '+15% all income', multiplier: 1.15 },
+  { id: 'm3', name: 'Quit Your Day Job', desc: 'Reach $100K total', threshold: 100_000, reward: '+10% all income', multiplier: 1.10 },
+  { id: 'm4', name: 'Gumroad Famous', desc: 'Reach $10M total', threshold: 10_000_000, reward: '+15% all income', multiplier: 1.15 },
   { id: 'm5', name: 'YC Interview', desc: 'Reach $100M total', threshold: 100_000_000, reward: '+20% all income', multiplier: 1.20 },
   { id: 'm6', name: 'Series A', desc: 'Reach $1B total', threshold: 1_000_000_000, reward: '+25% all income', multiplier: 1.25 },
   { id: 'm7', name: 'Unicorn Status', desc: 'Reach $100B total', threshold: 100_000_000_000, reward: '+30% all income', multiplier: 1.30 },
