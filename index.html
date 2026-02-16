@@ -541,6 +541,7 @@
     font-size: 24px;
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(5px);
+    position: relative;
   }
   .agent-info .agent-name {
     font-weight: 600;
@@ -1034,6 +1035,138 @@
   }
   @keyframes toastOut {
     to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  }
+
+  /* Welcome back popup */
+  .welcome-back {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--surface-solid);
+    border: 1px solid var(--accent-dim);
+    border-radius: 16px;
+    padding: 32px 40px;
+    text-align: center;
+    z-index: 2500;
+    backdrop-filter: blur(30px);
+    box-shadow: 0 20px 80px rgba(0,0,0,0.6), 0 0 40px var(--accent-glow);
+    animation: wbIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 360px;
+  }
+  @keyframes wbIn {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+  }
+  .welcome-back .wb-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .welcome-back .wb-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .welcome-back .wb-amount {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--accent-glow);
+    margin-bottom: 8px;
+  }
+  .welcome-back .wb-detail {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+  .welcome-back .wb-close {
+    padding: 8px 24px;
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .welcome-back .wb-close:hover { border-color: var(--accent-dim); color: var(--accent); }
+  .welcome-back-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 2499;
+    animation: wbIn 0.3s ease-out;
+  }
+
+  /* Milestone banner notification */
+  .milestone-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    text-align: center;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(0,255,163,0.1), rgba(136,85,255,0.1));
+    border-bottom: 1px solid var(--accent-dim);
+    backdrop-filter: blur(20px);
+    animation: bannerSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1), bannerOut 0.5s 3.5s forwards;
+  }
+  @keyframes bannerSlide {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes bannerOut {
+    to { transform: translateY(-100%); opacity: 0; }
+  }
+  .milestone-banner .mb-icon {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+  .milestone-banner .mb-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+  }
+  .milestone-banner .mb-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--accent-glow);
+    margin: 4px 0;
+  }
+  .milestone-banner .mb-reward {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* Agent count badge */
+  .agent-count-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    box-shadow: 0 0 12px var(--accent-glow);
+    z-index: 2;
   }
 
   /* Scrollbar */
@@ -3471,6 +3604,65 @@ function closeVictory() {
   document.getElementById('victory-overlay').classList.remove('active');
 }
 
+// ============ MILESTONE BANNER ============
+function showMilestoneBanner(m) {
+  // Remove any existing banner
+  document.querySelectorAll('.milestone-banner').forEach(el => el.remove());
+
+  const banner = document.createElement('div');
+  banner.className = 'milestone-banner';
+  banner.innerHTML = `
+    <div class="mb-label"><span class="mb-icon">🏆</span>Milestone Achieved</div>
+    <div class="mb-name">${m.name}</div>
+    <div class="mb-reward">${m.reward}</div>
+  `;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 4500);
+}
+
+// ============ OFFLINE EARNINGS ============
+function showWelcomeBack(earned, seconds) {
+  if (earned <= 0) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'welcome-back-overlay';
+  overlay.onclick = () => dismissWelcomeBack();
+
+  const popup = document.createElement('div');
+  popup.className = 'welcome-back';
+  popup.id = 'welcome-back-popup';
+
+  const mins = Math.floor(seconds / 60);
+  const hours = Math.floor(mins / 60);
+  let timeStr;
+  if (hours > 0) {
+    timeStr = `${hours}h ${mins % 60}m`;
+  } else if (mins > 0) {
+    timeStr = `${mins}m`;
+  } else {
+    timeStr = `${Math.floor(seconds)}s`;
+  }
+
+  popup.innerHTML = `
+    <div class="wb-label">Welcome Back</div>
+    <div class="wb-title">Your agents kept grinding</div>
+    <div class="wb-amount">+${formatMoney(earned)}</div>
+    <div class="wb-detail">earned over ${timeStr} while you were away</div>
+    <button class="wb-close" onclick="dismissWelcomeBack()">Collect</button>
+  `;
+
+  document.body.appendChild(overlay);
+  document.body.appendChild(popup);
+  playSFX('milestone');
+}
+
+function dismissWelcomeBack() {
+  const popup = document.getElementById('welcome-back-popup');
+  const overlay = document.querySelector('.welcome-back-overlay');
+  if (popup) popup.remove();
+  if (overlay) overlay.remove();
+}
+
 // ============ MILESTONES CHECK ============
 let escapeTriggered = false;
 
@@ -3480,7 +3672,7 @@ function checkMilestones() {
       state.milestones[m.id] = true;
       playSFX('milestone');
       log(`<span class="log-good">Milestone: ${m.name}!</span> ${m.reward}`);
-      toast(`Milestone: ${m.name}!`);
+      showMilestoneBanner(m);
       renderMilestones();
 
       // Bootstrapper nod — no VC money, pure grind
@@ -3527,7 +3719,7 @@ function renderStore() {
       : `each: ${formatMoney(agent.baseMps * getMilestoneMultiplier() * getVCMultiplier() * getPrestigeMultiplier())}/s`;
 
     card.innerHTML = `
-      <div class="agent-icon" style="background:${agent.iconBg}">${locked ? '🔒' : agent.icon}</div>
+      <div class="agent-icon" style="background:${agent.iconBg}">${locked ? '🔒' : agent.icon}${(!locked && owned > 0) ? `<div class="agent-count-badge">${owned}</div>` : ''}</div>
       <div class="agent-info">
         <div class="agent-name">${locked ? '???' : agent.name}</div>
         <div class="agent-desc">${locked ? `Unlocks at ${formatMoney(agent.unlockAt)} total earned` : agent.desc}</div>
@@ -3670,6 +3862,7 @@ const SAVE_KEY = 'escape_underclass_save';
 
 function save() {
   try {
+    state.lastSaved = Date.now();
     localStorage.setItem(SAVE_KEY, JSON.stringify(state));
     const el = document.getElementById('save-status');
     el.textContent = 'saved';
@@ -3767,6 +3960,27 @@ window.addEventListener('beforeunload', save);
 
 // ============ INIT ============
 load();
+
+// Calculate offline earnings
+if (state.lastSaved) {
+  const awaySeconds = (Date.now() - state.lastSaved) / 1000;
+  // Only show if away for at least 60 seconds and has agents producing
+  if (awaySeconds >= 60) {
+    const mps = getMPS();
+    if (mps > 0) {
+      // Cap offline time at 24 hours, earn at 50% efficiency
+      const cappedSeconds = Math.min(awaySeconds, 86400);
+      const offlineEarned = mps * cappedSeconds * 0.5;
+      state.cash += offlineEarned;
+      state.totalEarned += offlineEarned;
+      state.totalAllTime += offlineEarned;
+      save();
+      // Show popup after a brief delay so the page renders first
+      setTimeout(() => showWelcomeBack(offlineEarned, cappedSeconds), 500);
+    }
+  }
+}
+
 renderAll();
 log('Welcome to <span class="log-good">Escape the Underclass</span>.');
 if ((state.founderGeneration || 0) > 0) {
