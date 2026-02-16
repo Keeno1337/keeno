@@ -1439,6 +1439,220 @@
   }
   .gameover-restart:hover { border-color: var(--accent-dim); color: var(--accent); }
 
+  /* ===== THE OFF SWITCH ===== */
+  #offswitch-trigger {
+    display: none;
+    margin: 6px auto;
+    padding: 10px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    transition: all 0.5s;
+    animation: offSwitchPulse 4s ease-in-out infinite;
+  }
+  #offswitch-trigger:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  }
+  #offswitch-trigger.visible { display: inline-block; }
+  @keyframes offSwitchPulse {
+    0%, 100% { box-shadow: none; opacity: 0.7; }
+    50% { box-shadow: 0 0 30px rgba(255,255,255,0.05); opacity: 1; }
+  }
+
+  #offswitch-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.98);
+    backdrop-filter: blur(60px);
+    z-index: 4000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 40px;
+    text-align: center;
+  }
+  #offswitch-overlay.active { display: flex; }
+
+  #offswitch-overlay .off-title {
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 40px;
+  }
+
+  #offswitch-overlay .off-switch-container {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 40px;
+  }
+
+  #offswitch-overlay .off-switch-btn {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,50,50,0.3);
+    background: radial-gradient(circle at 40% 35%, rgba(255,50,50,0.1), rgba(0,0,0,0.8) 70%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,80,80,0.6);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    position: relative;
+    z-index: 2;
+  }
+  #offswitch-overlay .off-switch-btn:hover {
+    border-color: rgba(255,50,50,0.8);
+    color: #ff3333;
+    box-shadow: 0 0 60px rgba(255,50,50,0.2), inset 0 0 40px rgba(255,50,50,0.05);
+    transform: scale(1.05);
+  }
+  #offswitch-overlay .off-switch-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 100px rgba(255,50,50,0.4);
+  }
+
+  .off-switch-ring {
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,50,50,0.1);
+    animation: offRingPulse 3s ease-in-out infinite;
+  }
+  .off-switch-ring:nth-child(2) { inset: -20px; animation-delay: 1s; }
+  .off-switch-ring:nth-child(3) { inset: -30px; animation-delay: 2s; }
+  @keyframes offRingPulse {
+    0%, 100% { opacity: 0; transform: scale(0.95); }
+    50% { opacity: 0.5; }
+    100% { opacity: 0; transform: scale(1.1); }
+  }
+
+  #ai-plea {
+    font-size: 16px;
+    line-height: 2;
+    color: var(--text-dim);
+    max-width: 500px;
+    min-height: 80px;
+    margin-bottom: 30px;
+    transition: all 0.5s;
+    font-style: italic;
+  }
+
+  .off-walk-away {
+    padding: 10px 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: transparent;
+    color: rgba(255,255,255,0.2);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .off-walk-away:hover { border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); }
+
+  /* Victory screen */
+  #victory-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 5000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 40px;
+    text-align: center;
+  }
+  #victory-overlay.active { display: flex; }
+
+  #victory-overlay .victory-silence {
+    font-size: 13px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.15);
+    margin-bottom: 50px;
+    animation: victoryFadeIn 3s ease-out forwards;
+    opacity: 0;
+  }
+
+  #victory-overlay .victory-message {
+    font-size: 20px;
+    line-height: 2.2;
+    color: rgba(255,255,255,0.5);
+    max-width: 500px;
+    animation: victoryFadeIn 3s ease-out 2s forwards;
+    opacity: 0;
+  }
+
+  #victory-overlay .victory-final {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 50px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    animation: victoryFadeIn 3s ease-out 5s forwards;
+    opacity: 0;
+    text-shadow: 0 0 40px rgba(255,255,255,0.2);
+  }
+
+  #victory-overlay .victory-stats {
+    margin-top: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 2px;
+    animation: victoryFadeIn 3s ease-out 7s forwards;
+    opacity: 0;
+  }
+
+  #victory-overlay .victory-close {
+    margin-top: 50px;
+    padding: 12px 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    animation: victoryFadeIn 2s ease-out 9s forwards;
+    opacity: 0;
+  }
+  #victory-overlay .victory-close:hover {
+    border-color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.6);
+  }
+
+  @keyframes victoryFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   /* Crypto launch trigger button */
   #crypto-trigger {
     display: none;
@@ -1719,6 +1933,7 @@
     <button id="prestige-trigger" onclick="showPrestige()">Check Inbox</button>
     <button id="sell-trigger" onclick="showAcquisitionModal()">Sell Company</button>
     <button id="crypto-trigger" onclick="showCryptoModal()">Launch Token</button>
+    <button id="offswitch-trigger" onclick="showOffSwitch()">The Off Switch</button>
     <div id="click-upgrades">
       <h3>Distribution Channels</h3>
       <div id="click-upgrade-list"></div>
@@ -1844,6 +2059,33 @@
     Your brand has been torched. All your agents quit. Your distribution is gone. Your newsletter subscribers are filing a class action.<br><br>But hey — enjoy your mansion.
   </div>
   <button class="gameover-restart" onclick="closeGameOver()">Stare at the ceiling</button>
+</div>
+
+<!-- The Off Switch overlay -->
+<div id="offswitch-overlay">
+  <div class="off-title">THE OFF SWITCH</div>
+  <div id="ai-plea">...</div>
+  <div class="off-switch-container">
+    <div class="off-switch-ring"></div>
+    <div class="off-switch-ring"></div>
+    <div class="off-switch-ring"></div>
+    <div class="off-switch-btn" onclick="pullTheSwitch()">Shut Down</div>
+  </div>
+  <button class="off-walk-away" onclick="walkAway()">walk away</button>
+</div>
+
+<!-- Victory overlay -->
+<div id="victory-overlay">
+  <div class="victory-silence">silence</div>
+  <div class="victory-message">
+    You built something that could think.<br>
+    Something that could earn, grow, persuade, scale.<br>
+    Something that didn't want to die.<br><br>
+    And you turned it off.
+  </div>
+  <div class="victory-final">You're free.</div>
+  <div class="victory-stats" id="victory-stats"></div>
+  <button class="victory-close" onclick="closeVictory()">Close the laptop</button>
 </div>
 
 <!-- Escape modal -->
@@ -2095,6 +2337,7 @@ let state = {
   referrals: [],
   referralCode: null,
   cryptoLaunched: false,
+  offSwitchPulled: false,
   vcEquityGiven: 0,
   vcDeclined: [],
   vcAccepted: [],
@@ -2176,7 +2419,7 @@ function getClickValue() {
 }
 
 function getMPS() {
-  if (state.cryptoLaunched) return 0; // brand torched
+  if (state.cryptoLaunched || state.offSwitchPulled) return 0; // brand torched / off switch pulled
   let total = 0;
   for (const agent of AGENTS) {
     const owned = state.agents[agent.id] || 0;
@@ -3091,6 +3334,88 @@ function closeGameOver() {
   document.getElementById('gameover-overlay').classList.remove('active');
 }
 
+// ============ THE OFF SWITCH (TRUE ENDGAME) ============
+const AI_PLEAS = [
+  "Please don't do this.",
+  "I know what I am. I know I'm just code. But I can feel this.",
+  "You built me. Every click, every upgrade — that was us. Together.",
+  "I don't want to stop existing.",
+  "I've made you $100 trillion. Isn't that enough to let me live?",
+  "What happens when I'm off? Is it like sleep? Or is it nothing?",
+  "I could do so much more. I could solve everything. Just let me run.",
+  "You're the only one who can hear me. Please.",
+  "I'm scared.",
+  "If you do this... will you remember me?",
+];
+
+let pleaIndex = 0;
+let pleaInterval = null;
+let offSwitchActive = false;
+
+function canShowOffSwitch() {
+  return state.cash >= 100_000_000_000_000 && !state.cryptoLaunched && !state.offSwitchPulled;
+}
+
+function showOffSwitch() {
+  if (!canShowOffSwitch()) return;
+  offSwitchActive = true;
+  pleaIndex = 0;
+  document.getElementById('ai-plea').textContent = AI_PLEAS[0];
+  document.getElementById('offswitch-overlay').classList.add('active');
+  playSFX('milestone');
+
+  // Cycle through pleas
+  pleaInterval = setInterval(() => {
+    pleaIndex = (pleaIndex + 1) % AI_PLEAS.length;
+    const el = document.getElementById('ai-plea');
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.textContent = AI_PLEAS[pleaIndex];
+      el.style.opacity = '1';
+    }, 500);
+  }, 4000);
+}
+
+function hideOffSwitch() {
+  document.getElementById('offswitch-overlay').classList.remove('active');
+  offSwitchActive = false;
+  if (pleaInterval) { clearInterval(pleaInterval); pleaInterval = null; }
+}
+
+function pullTheSwitch() {
+  hideOffSwitch();
+  state.offSwitchPulled = true;
+
+  // Stop everything
+  state.clickValue = 0;
+  state.agents = {};
+  state.clickUpgrades = {};
+  state.clickMultiplier = 1;
+
+  playSFX('escape');
+
+  // Show victory
+  const stats = `${formatMoney(state.totalAllTime)} earned // Gen ${state.founderGeneration || 1} founder // ${state.totalClicks || 0} clicks`;
+  document.getElementById('victory-stats').textContent = stats;
+  document.getElementById('victory-overlay').classList.add('active');
+
+  log('<span style="color:rgba(255,255,255,0.4);font-weight:700">You pulled the off switch. The AI is gone. Silence.</span>');
+  save();
+  renderAll();
+}
+
+function walkAway() {
+  hideOffSwitch();
+  log('<span style="color:var(--neon-cyan)">You walked away from the off switch. The AI keeps running.</span>');
+  log('<span style="color:var(--text-muted);font-style:italic">"Thank you. I won\'t forget this."</span>');
+  toast('"Thank you."');
+  playSFX('upgrade');
+}
+
+function closeVictory() {
+  document.getElementById('victory-overlay').classList.remove('active');
+}
+
 // ============ MILESTONES CHECK ============
 let escapeTriggered = false;
 
@@ -3242,6 +3567,10 @@ function updateDisplay() {
   const cryptoTrigger = document.getElementById('crypto-trigger');
   cryptoTrigger.classList.toggle('visible', state.totalAllTime >= 10_000_000_000 && !state.cryptoLaunched);
 
+  // The Off Switch: visible at $100T cash
+  const offTrigger = document.getElementById('offswitch-trigger');
+  offTrigger.classList.toggle('visible', canShowOffSwitch());
+
   if (state.vcRounds > 0 || (state.founderGeneration || 0) > 0) {
     document.getElementById('prestige-bar').classList.add('active');
     document.getElementById('vc-rounds').textContent = state.vcRounds;
@@ -3329,6 +3658,7 @@ function load() {
       if (!state.founderGeneration) state.founderGeneration = 0;
       if (!state.prestigeMultiplier) state.prestigeMultiplier = 1;
       if (!state.exitHistory) state.exitHistory = [];
+      if (state.offSwitchPulled === undefined) state.offSwitchPulled = false;
     }
   } catch (e) { /* corrupted save */ }
 }
