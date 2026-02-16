@@ -2097,6 +2097,7 @@ let state = {
   cryptoLaunched: false,
   vcEquityGiven: 0,
   vcDeclined: [],
+  vcAccepted: [],
   // Prestige (persists across resets)
   founderGeneration: 0,
   prestigeMultiplier: 1,
@@ -2113,7 +2114,7 @@ const AGENTS = [
   { id: 'reseller', name: 'TCG Reseller Bot', desc: 'Snipes Pokémon cards at retail and flips on eBay. Content is the moat.', icon: '🃏', iconBg: 'rgba(60,40,20,0.5)', baseCost: 1_400_000, baseMps: 1_400, costScale: 1.15, unlockAt: 1_000_000 },
   { id: 'livesell', name: 'Live Selling Agent', desc: 'Runs 24/7 Whatnot streams. Never sleeps. "SOLD to the phone bidder!"', icon: '🔴', iconBg: 'rgba(60,15,15,0.5)', baseCost: 20_000_000, baseMps: 7_800, costScale: 1.15, unlockAt: 10_000_000 },
   { id: 'founder', name: 'AI Co-Founder', desc: 'Runs an entire micro-SaaS autonomously. Wants equity and a podcast.', icon: '🧠', iconBg: 'rgba(40,20,20,0.5)', baseCost: 330_000_000, baseMps: 44_000, costScale: 1.15, unlockAt: 100_000_000 },
-  { id: 'memecoin', name: 'Memecoin Launcher', desc: 'Deploys tokens, buys its own supply, rugs respectfully. "WAGMI."', icon: '🪙', iconBg: 'rgba(50,50,10,0.5)', baseCost: 5_100_000_000, baseMps: 260_000, costScale: 1.15, unlockAt: 1_000_000_000 },
+  { id: 'memecoin', name: 'AI Research Lab', desc: 'Autonomous lab that writes papers, trains models, and emails you "we achieved AGI" every Tuesday.', icon: '🔬', iconBg: 'rgba(30,50,60,0.5)', baseCost: 2_000_000_000, baseMps: 260_000, costScale: 1.15, unlockAt: 500_000_000 },
   { id: 'agi', name: 'AGI (Probably)', desc: 'It passed the Turing test, your annual review, and launched its own Roblox world.', icon: '🌌', iconBg: 'rgba(20,20,40,0.5)', baseCost: 75_000_000_000, baseMps: 1_600_000, costScale: 1.15, unlockAt: 10_000_000_000 },
 ];
 
@@ -2474,15 +2475,12 @@ let currentVCEmail = null;
 let vcInboxReady = false;
 
 function getNextVCEmail() {
-  // Find the next VC email the player hasn't accepted or declined yet
-  const mps = getMPS();
-  const arr = mps * 2592000 * 12; // annual run rate
-  const completedRounds = state.vcRounds || 0;
-
+  // VC offers unlock when you hold 10% of the cash they're offering
+  // Each VC can only offer once — accepted or declined, it's done
   for (let i = 0; i < VC_EMAILS.length; i++) {
-    if (i < completedRounds) continue; // already completed this round
-    if (state.vcDeclined && state.vcDeclined.includes(i)) continue; // declined, wait for next threshold
-    if (arr >= VC_EMAILS[i].arrThreshold) {
+    if (state.vcAccepted && state.vcAccepted.includes(i)) continue;
+    if (state.vcDeclined && state.vcDeclined.includes(i)) continue;
+    if (state.cash >= VC_EMAILS[i].cashOffer * 0.1) {
       return { ...VC_EMAILS[i], index: i };
     }
   }
@@ -2557,6 +2555,8 @@ function acceptVCDeal() {
   state.vcPoints += e.vcPointsGain;
   state.vcRounds++;
   state.vcEquityGiven = (state.vcEquityGiven || 0) + e.equityAsk;
+  if (!state.vcAccepted) state.vcAccepted = [];
+  state.vcAccepted.push(e.index);
 
   // Cash injection
   state.cash += e.cashOffer;
@@ -2722,8 +2722,8 @@ function getExitPrestigeMultiplier() {
 }
 
 function canSellCompany() {
-  // Need at least 1 VC round and $50B+ total earned
-  return state.vcRounds >= 1 && state.totalAllTime >= 50_000_000_000 && !state.cryptoLaunched;
+  // Need at least 1 VC round and $15B+ total earned
+  return state.vcRounds >= 1 && state.totalAllTime >= 15_000_000_000 && !state.cryptoLaunched;
 }
 
 function showAcquisitionModal() {
@@ -2815,6 +2815,7 @@ function acceptAcquisition() {
   state.vcRounds = 0;
   state.vcEquityGiven = 0;
   state.vcDeclined = [];
+  state.vcAccepted = [];
   state.totalClicks = 0;
   state.nftHash = null;
   state.escaped = false;
@@ -3324,6 +3325,7 @@ function load() {
       if (!state.lastLockIn) state.lastLockIn = 0;
       if (!state.vcEquityGiven) state.vcEquityGiven = 0;
       if (!state.vcDeclined) state.vcDeclined = [];
+      if (!state.vcAccepted) state.vcAccepted = [];
       if (!state.founderGeneration) state.founderGeneration = 0;
       if (!state.prestigeMultiplier) state.prestigeMultiplier = 1;
       if (!state.exitHistory) state.exitHistory = [];
