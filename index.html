@@ -3368,13 +3368,14 @@ function importSave() {
 function confirmNewGame() {
   if (!confirm('Start a completely new game? This will erase ALL progress — including prestige. There is no undo.')) return;
   if (!confirm('Seriously. Everything gone. Are you sure?')) return;
-  localStorage.removeItem(SAVE_KEY);
+  clearInterval(autoSaveInterval);
   window.removeEventListener('beforeunload', save);
+  localStorage.removeItem(SAVE_KEY);
   location.reload();
 }
 
 // Auto-save every 30s
-setInterval(save, 30000);
+let autoSaveInterval = setInterval(save, 30000);
 window.addEventListener('beforeunload', save);
 
 // ============ INIT ============
