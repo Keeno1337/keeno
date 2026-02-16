@@ -1670,6 +1670,30 @@
     color: rgba(255,255,255,0.6);
   }
 
+  .victory-branding {
+    position: absolute;
+    bottom: 30px;
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: opacity 0.3s;
+    animation: victoryFadeIn 2s ease-out 10s forwards;
+    opacity: 0;
+  }
+  .victory-branding .built-by {
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 2px;
+  }
+  .victory-branding .hype-name {
+    font-weight: 700;
+    color: rgba(255,255,255,0.25);
+    font-size: 13px;
+  }
+  .victory-branding:hover .hype-name {
+    color: var(--accent);
+  }
+
   @keyframes victoryFadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -2114,6 +2138,9 @@
   <div class="victory-final">You're free.</div>
   <div class="victory-stats" id="victory-stats"></div>
   <button class="victory-close" onclick="closeVictory()">Close the laptop</button>
+  <a class="victory-branding" href="https://hy.pe" target="_blank" rel="noopener">
+    <span class="built-by">Built by</span> <span class="hype-name">HYPE</span>
+  </a>
 </div>
 
 <!-- Escape modal -->
