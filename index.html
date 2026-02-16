@@ -874,6 +874,430 @@
     color: var(--text-dim);
     font-size: 13px;
   }
+
+  /* ===== LOCK IN BUTTON ===== */
+  #lockin-btn {
+    display: none;
+    margin: 8px auto;
+    padding: 10px 24px;
+    border: 2px solid var(--gold);
+    background: rgba(255, 208, 0, 0.08);
+    color: var(--gold);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    transition: all 0.3s;
+    animation: lockInPulse 1.5s ease-in-out infinite;
+    text-shadow: 0 0 15px var(--gold-glow);
+    box-shadow: 0 0 30px rgba(255, 208, 0, 0.15), inset 0 0 20px rgba(255, 208, 0, 0.05);
+  }
+  #lockin-btn:hover {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 60px rgba(255, 208, 0, 0.3);
+    transform: scale(1.05);
+  }
+  #lockin-btn.visible { display: inline-block; }
+  @keyframes lockInPulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(255, 208, 0, 0.15); }
+    50% { box-shadow: 0 0 50px rgba(255, 208, 0, 0.3), 0 0 80px rgba(255, 208, 0, 0.1); }
+  }
+
+  /* Lock-in active indicator */
+  #lockin-indicator {
+    display: none;
+    text-align: center;
+    padding: 8px 16px;
+    background: linear-gradient(90deg, rgba(255,208,0,0.05), rgba(255,208,0,0.12), rgba(255,208,0,0.05));
+    border-bottom: 1px solid rgba(255, 208, 0, 0.2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px var(--gold-glow);
+    animation: lockInBar 0.5s ease-in-out infinite alternate;
+  }
+  #lockin-indicator.active { display: block; }
+  @keyframes lockInBar {
+    from { background: linear-gradient(90deg, rgba(255,208,0,0.05), rgba(255,208,0,0.12), rgba(255,208,0,0.05)); }
+    to { background: linear-gradient(90deg, rgba(255,208,0,0.08), rgba(255,208,0,0.18), rgba(255,208,0,0.08)); }
+  }
+
+  /* ===== CASINO MODAL ===== */
+  #casino-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(25px);
+    z-index: 1500;
+    align-items: center;
+    justify-content: center;
+  }
+  #casino-overlay.active { display: flex; }
+  #casino-modal {
+    background: var(--surface-solid);
+    border: 1px solid rgba(255, 51, 85, 0.3);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 460px;
+    text-align: center;
+    box-shadow: 0 0 100px rgba(255, 51, 85, 0.1);
+    position: relative;
+  }
+  #casino-modal h2 {
+    font-size: 22px;
+    color: var(--gold);
+    margin-bottom: 8px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 30px var(--gold-glow);
+  }
+  #casino-modal .casino-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+  #casino-modal .casino-stake {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 16px 0;
+    text-shadow: 0 0 20px var(--gold-glow);
+  }
+  .casino-choices {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .casino-btn {
+    padding: 14px 36px;
+    border: 2px solid;
+    background: transparent;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .casino-btn.red {
+    border-color: #ff3355;
+    color: #ff3355;
+  }
+  .casino-btn.red:hover {
+    background: #ff3355;
+    color: #fff;
+    box-shadow: 0 0 40px rgba(255, 51, 85, 0.3);
+  }
+  .casino-btn.black {
+    border-color: #888;
+    color: #ccc;
+  }
+  .casino-btn.black:hover {
+    background: #333;
+    color: #fff;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+  }
+  .casino-skip {
+    display: block;
+    margin-top: 12px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+  .casino-skip:hover { color: var(--text-dim); }
+  #casino-result {
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 16px 0;
+    letter-spacing: 2px;
+  }
+  #casino-result.win { color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); }
+  #casino-result.lose { color: var(--red); text-shadow: 0 0 20px rgba(255,51,85,0.3); }
+
+  /* ===== REFERRAL PANEL ===== */
+  #referral-panel {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  #referral-panel h3 {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .referral-code-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    background: rgba(0,255,163,0.03);
+    border: 1px solid rgba(0,255,163,0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  .referral-code-display:hover {
+    background: rgba(0,255,163,0.06);
+  }
+  .referral-input-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .referral-input {
+    flex: 1;
+    padding: 7px 10px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .referral-input:focus { border-color: var(--accent-dim); }
+  .referral-input::placeholder { color: var(--text-muted); text-transform: none; letter-spacing: 0; }
+  .referral-submit {
+    padding: 7px 14px;
+    background: rgba(0,255,163,0.05);
+    border: 1px solid var(--accent-dim);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .referral-submit:hover { background: var(--accent); color: #000; }
+  .referral-count {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+  .referral-count span { color: var(--accent); font-weight: 600; }
+
+  /* ===== CRYPTO TOKEN MODAL ===== */
+  #crypto-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(30px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  #crypto-overlay.active { display: flex; }
+  #crypto-modal {
+    background: var(--surface-solid);
+    border: 1px solid rgba(255, 51, 85, 0.3);
+    border-radius: 20px;
+    padding: 44px;
+    max-width: 520px;
+    text-align: center;
+    box-shadow: 0 0 120px rgba(255, 51, 85, 0.1);
+    position: relative;
+  }
+  #crypto-modal h2 {
+    font-size: 26px;
+    color: var(--neon-pink);
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 30px rgba(255, 34, 136, 0.4);
+  }
+  #crypto-modal .crypto-warning {
+    font-size: 12px;
+    color: var(--red);
+    margin: 12px 0;
+    line-height: 1.6;
+    font-weight: 600;
+  }
+  #crypto-modal p {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .crypto-launch-btn {
+    padding: 14px 36px;
+    border: 2px solid var(--neon-pink);
+    background: rgba(255, 34, 136, 0.08);
+    color: var(--neon-pink);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 6px;
+  }
+  .crypto-launch-btn:hover {
+    background: var(--neon-pink);
+    color: #fff;
+    box-shadow: 0 0 40px rgba(255, 34, 136, 0.3);
+  }
+  .crypto-cancel-btn {
+    padding: 10px 24px;
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 6px;
+    transition: all 0.2s;
+  }
+  .crypto-cancel-btn:hover { border-color: var(--accent-dim); color: var(--text); }
+
+  /* Game over screen */
+  #gameover-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(40px);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  #gameover-overlay.active { display: flex; }
+  #gameover-overlay .gameover-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--neon-pink);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    text-shadow: 0 0 60px rgba(255, 34, 136, 0.5);
+    margin-bottom: 16px;
+    animation: gameoverGlow 2s ease-in-out infinite;
+  }
+  @keyframes gameoverGlow {
+    0%, 100% { text-shadow: 0 0 60px rgba(255, 34, 136, 0.5); }
+    50% { text-shadow: 0 0 100px rgba(255, 34, 136, 0.8), 0 0 40px rgba(255, 34, 136, 0.3); }
+  }
+  #gameover-overlay .gameover-sub {
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  #gameover-overlay .gameover-cash {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    text-shadow: 0 0 30px var(--gold-glow);
+    margin: 16px 0;
+  }
+  #gameover-overlay .gameover-msg {
+    font-size: 13px;
+    color: var(--text-muted);
+    max-width: 400px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .gameover-restart {
+    padding: 10px 24px;
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .gameover-restart:hover { border-color: var(--accent-dim); color: var(--accent); }
+
+  /* Crypto launch trigger button */
+  #crypto-trigger {
+    display: none;
+    margin: 6px auto;
+    padding: 8px 18px;
+    border: 1px solid rgba(255, 34, 136, 0.3);
+    background: rgba(255, 34, 136, 0.05);
+    color: var(--neon-pink);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.25s;
+    animation: cryptoPulse 3s ease-in-out infinite;
+  }
+  #crypto-trigger:hover { background: var(--neon-pink); color: #fff; }
+  #crypto-trigger.visible { display: inline-block; }
+  @keyframes cryptoPulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 20px rgba(255, 34, 136, 0.2); }
+  }
+
+  /* Second Time Founder badge */
+  #founder-badge {
+    display: none;
+    text-align: center;
+    padding: 4px 12px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--neon-cyan);
+    background: rgba(0, 229, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+  }
+  #founder-badge.active { display: block; }
+
+  /* Milestone progress bar */
+  .milestone .m-progress-wrap {
+    height: 3px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .milestone.achieved .m-progress-wrap { display: none; }
+  .milestone .m-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
 </style>
 </head>
 <body>
@@ -905,11 +1329,15 @@
   <div class="line"></div>
 </div>
 
+<div id="founder-badge">Second Time Founder — <span id="founder-bonus-text">costs reduced</span></div>
+
 <div id="prestige-bar">
   <span class="prestige-label">Venture Capital Rounds: </span>
   <span class="prestige-count" id="vc-rounds">0</span>
   <span class="prestige-label"> &mdash; All income &times;<span id="vc-mult">1.0</span></span>
 </div>
+
+<div id="lockin-indicator">LOCKED IN — 50x PRODUCTION — <span id="lockin-timer">30s</span></div>
 
 <div id="stats-bar">
   <div class="stat">
@@ -953,7 +1381,9 @@
         <span class="amount" id="click-value">+$1</span>
       </div>
     </div>
+    <button id="lockin-btn" onclick="doLockIn()">Lock In</button>
     <button id="prestige-trigger" onclick="showPrestige()">Raise VC Round</button>
+    <button id="crypto-trigger" onclick="showCryptoModal()">Launch Token</button>
     <div id="click-upgrades">
       <h3>Distribution Channels</h3>
       <div id="click-upgrade-list"></div>
@@ -969,6 +1399,15 @@
     <div id="milestones-panel">
       <h3>Milestones</h3>
       <div id="milestone-list"></div>
+    </div>
+    <div id="referral-panel">
+      <h3>Referral Network</h3>
+      <div id="referral-code-box"></div>
+      <div class="referral-input-row">
+        <input class="referral-input" id="referral-input" type="text" maxlength="8" placeholder="Enter a code...">
+        <button class="referral-submit" onclick="submitReferral()">Add</button>
+      </div>
+      <div class="referral-count" id="referral-count"></div>
     </div>
     <div id="log-panel">
       <h3>Activity Log</h3>
@@ -997,6 +1436,51 @@
       <button class="prestige-btn cancel" onclick="hidePrestige()">Not Yet</button>
     </div>
   </div>
+</div>
+
+<!-- Casino modal -->
+<div id="casino-overlay">
+  <div id="casino-modal">
+    <h2>Bonus Round</h2>
+    <div class="casino-sub">THE HOUSE ALWAYS WINS (ALMOST)</div>
+    <p>A mysterious trader appears. Put it all on the line?</p>
+    <div class="casino-stake">Stake: <span id="casino-stake-amount">$0</span></div>
+    <div id="casino-choices">
+      <div class="casino-choices">
+        <button class="casino-btn red" onclick="casinoBet('red')">RED</button>
+        <button class="casino-btn black" onclick="casinoBet('black')">BLACK</button>
+      </div>
+      <button class="casino-skip" onclick="casinoSkip()">walk away like a coward</button>
+    </div>
+    <div id="casino-result"></div>
+  </div>
+</div>
+
+<!-- Crypto token modal -->
+<div id="crypto-overlay">
+  <div id="crypto-modal">
+    <h2>Launch a Token</h2>
+    <p>You've made it. Now it's time for the ultimate play.</p>
+    <p>Launch your own crypto token. Your cash will be <strong style="color:var(--gold)">DOUBLED</strong> instantly.</p>
+    <div class="crypto-warning">WARNING: This will permanently destroy ALL your agents, distribution channels, and revenue streams. Your brand will be torched. There is no going back.</div>
+    <p style="color:var(--text-muted);font-size:11px">Your MPS drops to $0/sec. Forever. Game over.</p>
+    <div style="margin-top:16px">
+      <button class="crypto-launch-btn" onclick="launchCryptoToken()">Launch $COPE Token</button>
+      <br>
+      <button class="crypto-cancel-btn" onclick="hideCryptoModal()">I still have integrity</button>
+    </div>
+  </div>
+</div>
+
+<!-- Game Over overlay -->
+<div id="gameover-overlay">
+  <div class="gameover-title">Brand Torched</div>
+  <div class="gameover-sub">$COPE TO THE MOON</div>
+  <div class="gameover-cash" id="gameover-cash">$0</div>
+  <div class="gameover-msg">
+    Your brand has been torched. All your agents quit. Your distribution is gone. Your newsletter subscribers are filing a class action.<br><br>But hey — enjoy your mansion.
+  </div>
+  <button class="gameover-restart" onclick="closeGameOver()">Stare at the ceiling</button>
 </div>
 
 <!-- NFT Hash modal -->
@@ -1243,6 +1727,11 @@ let state = {
   totalClicks: 0,
   nftHash: null,
   escaped: false,
+  lastLockIn: 0,
+  lockInEnd: 0,
+  referrals: [],
+  referralCode: null,
+  cryptoLaunched: false,
 };
 
 // ============ AGENT DEFINITIONS ============
@@ -1266,7 +1755,7 @@ const CLICK_UPGRADES = [
   { id: 'dist3', name: 'YouTube Shorts', desc: 'Cross-post everything to Shorts — 5x per post', cost: 50_000, multiplier: 5, orbitIcon: '▶️' },
   { id: 'dist4', name: 'TikTok Syndication', desc: 'Content repurposed on autopilot — 10x per post', cost: 500_000, multiplier: 10, orbitIcon: '🎵' },
   { id: 'dist5', name: 'Newsletter Empire', desc: 'Substack → Beehiiv → paid subs — 50x per post', cost: 50_000_000, multiplier: 50, orbitIcon: '✉️' },
-  { id: 'dist6', name: 'Omnipresence Protocol', desc: 'Every platform, every format, all at once — 500x per post', cost: 50_000_000_000, multiplier: 500, orbitIcon: '🌐' },
+  { id: 'dist6', name: 'Omnipresence Protocol', desc: 'Every platform, every format, all at once — 100x per post', cost: 5_000_000_000, multiplier: 100, orbitIcon: '🌐' },
 ];
 
 // ============ MILESTONES ============
@@ -1275,7 +1764,7 @@ const MILESTONES = [
   { id: 'm2', name: 'Ramen Profitable', desc: 'Reach $1,000 total', threshold: 1_000, reward: '+5% all income', multiplier: 1.05 },
   { id: 'm3', name: 'Quit Your Day Job', desc: 'Reach $100K total', threshold: 100_000, reward: '+10% all income', multiplier: 1.10 },
   { id: 'm4', name: 'Gumroad Famous', desc: 'Reach $10M total', threshold: 10_000_000, reward: '+15% all income', multiplier: 1.15 },
-  { id: 'm5', name: 'YC Interview', desc: 'Reach $100M total', threshold: 100_000_000, reward: '+20% all income', multiplier: 1.20 },
+  { id: 'm5', name: 'Turn Down YC', desc: 'Reach $100M total', threshold: 100_000_000, reward: '+20% all income — you don\'t need their 7%', multiplier: 1.20 },
   { id: 'm6', name: 'Series A', desc: 'Reach $1B total', threshold: 1_000_000_000, reward: '+25% all income', multiplier: 1.25 },
   { id: 'm7', name: 'Unicorn Status', desc: 'Reach $100B total', threshold: 100_000_000_000, reward: '+30% all income', multiplier: 1.30 },
   { id: 'm8', name: 'Escaped', desc: 'Reach $1T total', threshold: 1_000_000_000_000, reward: 'You made it.', multiplier: 1.50 },
@@ -1293,7 +1782,7 @@ function formatMoney(n) {
 
 function getAgentCost(agent) {
   const owned = state.agents[agent.id] || 0;
-  return Math.floor(agent.baseCost * Math.pow(agent.costScale, owned));
+  return Math.floor(agent.baseCost * Math.pow(agent.costScale, owned) * getFounderCostDiscount());
 }
 
 function getMilestoneMultiplier() {
@@ -1309,16 +1798,17 @@ function getVCMultiplier() {
 }
 
 function getClickValue() {
-  return state.clickValue * state.clickMultiplier * getMilestoneMultiplier() * getVCMultiplier();
+  return state.clickValue * state.clickMultiplier * getMilestoneMultiplier() * getVCMultiplier() * getReferralMultiplier() * getLockInMultiplier();
 }
 
 function getMPS() {
+  if (state.cryptoLaunched) return 0; // brand torched
   let total = 0;
   for (const agent of AGENTS) {
     const owned = state.agents[agent.id] || 0;
     total += owned * agent.baseMps;
   }
-  return total * getMilestoneMultiplier() * getVCMultiplier();
+  return total * getMilestoneMultiplier() * getVCMultiplier() * getReferralMultiplier() * getLockInMultiplier();
 }
 
 function getTotalAgents() {
@@ -1453,6 +1943,7 @@ animateOrbit();
 let clickIndicatorHidden = false;
 
 function handleClick(e) {
+  if (state.cryptoLaunched) { playSFX('deny'); return; }
   const value = getClickValue();
   state.cash += value;
   state.totalEarned += value;
@@ -1481,6 +1972,7 @@ function handleClick(e) {
 
 // ============ BUY AGENT ============
 function buyAgent(agentId) {
+  if (state.cryptoLaunched) { playSFX('deny'); return; }
   const agent = AGENTS.find(a => a.id === agentId);
   if (!agent) return;
   const cost = getAgentCost(agent);
@@ -1495,12 +1987,17 @@ function buyAgent(agentId) {
 }
 
 // ============ BUY CLICK UPGRADE ============
+function getUpgradeCost(up) {
+  return Math.floor(up.cost * getFounderCostDiscount());
+}
+
 function buyClickUpgrade(upId) {
   const up = CLICK_UPGRADES.find(u => u.id === upId);
   if (!up || state.clickUpgrades[upId]) return;
-  if (state.cash < up.cost) { playSFX('deny'); return; }
+  const cost = getUpgradeCost(up);
+  if (state.cash < cost) { playSFX('deny'); return; }
 
-  state.cash -= up.cost;
+  state.cash -= cost;
   state.clickUpgrades[upId] = true;
   state.clickMultiplier *= up.multiplier;
   playSFX('upgrade');
@@ -1537,12 +2034,318 @@ function doPrestige() {
   state.clickMultiplier = 1;
   state.agents = {};
   state.clickUpgrades = {};
+  state.cryptoLaunched = false; // can prestige away from crypto shame
+
+  // Second Time Founder: start with bonus cash
+  const startBonus = getFounderStartBonus();
+  if (startBonus > 0) {
+    state.cash = startBonus;
+    state.totalEarned = startBonus;
+  }
 
   playSFX('prestige');
+  const discount = Math.round((1 - getFounderCostDiscount()) * 100);
   log(`<span class="log-good">VC Round #${state.vcRounds}!</span> Gained ${gain} VC points. Multiplier: x${getVCMultiplier().toFixed(1)}`);
+  if (state.vcRounds >= 1) {
+    log(`<span style="color:var(--neon-cyan)">Second Time Founder:</span> ${discount}% cost reduction, +${formatMoney(startBonus)} starting cash`);
+  }
   toast(`VC Round raised! +${gain} points`);
   hidePrestige();
+  updateFounderBadge();
   renderAll();
+}
+
+// ============ LOCK IN MECHANIC ============
+const LOCKIN_COOLDOWN = 3600000; // 1 hour in ms
+const LOCKIN_DURATION = 30; // seconds
+const LOCKIN_MULTIPLIER = 50;
+
+function isLockInReady() {
+  return Date.now() - (state.lastLockIn || 0) >= LOCKIN_COOLDOWN;
+}
+
+function isLockInActive() {
+  return state.lockInEnd && Date.now() < state.lockInEnd;
+}
+
+function getLockInMultiplier() {
+  return isLockInActive() ? LOCKIN_MULTIPLIER : 1;
+}
+
+function doLockIn() {
+  if (!isLockInReady() || isLockInActive()) return;
+  state.lastLockIn = Date.now();
+  state.lockInEnd = Date.now() + (LOCKIN_DURATION * 1000);
+  playSFX('escape'); // epic sound for epic moment
+  log('<span class="log-good">LOCKED IN!</span> <span class="log-money">50x production for 30 seconds!</span>');
+  toast('LOCKED IN — 50x PRODUCTION!');
+}
+
+function updateLockIn() {
+  const btn = document.getElementById('lockin-btn');
+  const indicator = document.getElementById('lockin-indicator');
+  const timer = document.getElementById('lockin-timer');
+
+  if (isLockInActive()) {
+    btn.classList.remove('visible');
+    indicator.classList.add('active');
+    const remaining = Math.ceil((state.lockInEnd - Date.now()) / 1000);
+    timer.textContent = remaining + 's';
+  } else {
+    indicator.classList.remove('active');
+    if (isLockInReady()) {
+      btn.classList.add('visible');
+      btn.textContent = 'Lock In';
+    } else {
+      const remaining = Math.ceil((LOCKIN_COOLDOWN - (Date.now() - state.lastLockIn)) / 60000);
+      btn.classList.add('visible');
+      btn.textContent = `Lock In (${remaining}m)`;
+      btn.style.opacity = '0.4';
+      btn.style.cursor = 'not-allowed';
+      btn.style.animation = 'none';
+    }
+    if (isLockInReady()) {
+      btn.style.opacity = '';
+      btn.style.cursor = '';
+      btn.style.animation = '';
+    }
+  }
+}
+
+// ============ SECOND TIME FOUNDER ============
+function getFounderCostDiscount() {
+  // Each VC round reduces costs by 5%, up to 50% max
+  if (state.vcRounds <= 0) return 1;
+  return Math.max(0.5, 1 - state.vcRounds * 0.05);
+}
+
+function getFounderStartBonus() {
+  // Second time founders start with cash based on rounds
+  return state.vcRounds * 1000;
+}
+
+function updateFounderBadge() {
+  const badge = document.getElementById('founder-badge');
+  if (state.vcRounds >= 1) {
+    badge.classList.add('active');
+    const discount = Math.round((1 - getFounderCostDiscount()) * 100);
+    document.getElementById('founder-bonus-text').textContent =
+      `${discount}% cheaper agents & upgrades`;
+  } else {
+    badge.classList.remove('active');
+  }
+}
+
+// ============ REFERRAL SYSTEM ============
+function generateReferralCode() {
+  // Generate a deterministic code from game state
+  const seed = 'REF' + (state.totalClicks || 0) + (state.totalAllTime || 0).toFixed(0) + Date.now();
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
+  }
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  let h = Math.abs(hash);
+  for (let i = 0; i < 6; i++) {
+    code += chars[h % chars.length];
+    h = Math.floor(h / chars.length) + i * 7;
+    h = Math.abs(h);
+  }
+  return code;
+}
+
+function isValidReferralCode(code) {
+  // Must be 6 alphanumeric chars
+  return /^[A-Z0-9]{6}$/i.test(code);
+}
+
+function getReferralMultiplier() {
+  const count = (state.referrals || []).length;
+  if (count === 0) return 1;
+  // Each referral: +15% stacking. MLM baby.
+  return 1 + count * 0.15;
+}
+
+function submitReferral() {
+  const input = document.getElementById('referral-input');
+  const code = input.value.trim().toUpperCase();
+
+  if (!code || code.length < 4) {
+    playSFX('deny');
+    toast('Enter a valid referral code.');
+    return;
+  }
+
+  if (!isValidReferralCode(code)) {
+    playSFX('deny');
+    toast('Invalid code format.');
+    return;
+  }
+
+  if (code === state.referralCode) {
+    playSFX('deny');
+    toast("Can't use your own code, chief.");
+    return;
+  }
+
+  if (state.referrals && state.referrals.includes(code)) {
+    playSFX('deny');
+    toast('Already used this code.');
+    return;
+  }
+
+  if (!state.referrals) state.referrals = [];
+  state.referrals.push(code);
+
+  // Bonus: flat cash bonus + permanent multiplier
+  const bonus = Math.max(state.totalAllTime * 0.05, 10000);
+  state.cash += bonus;
+  state.totalEarned += bonus;
+  state.totalAllTime += bonus;
+
+  playSFX('milestone');
+  log(`<span class="log-good">Referral accepted!</span> +${formatMoney(bonus)} bonus. Network: ${state.referrals.length} referrals (${getReferralMultiplier().toFixed(2)}x)`);
+  toast(`Referral +${formatMoney(bonus)}! Network grows...`);
+
+  input.value = '';
+  renderReferralPanel();
+  save();
+}
+
+function renderReferralPanel() {
+  // Generate code if needed
+  if (!state.referralCode) {
+    state.referralCode = generateReferralCode();
+  }
+
+  const codeBox = document.getElementById('referral-code-box');
+  codeBox.innerHTML = `<div class="referral-code-display" onclick="copyReferralCode()" title="Click to copy">${state.referralCode}</div>`;
+
+  const countEl = document.getElementById('referral-count');
+  const count = (state.referrals || []).length;
+  if (count > 0) {
+    countEl.innerHTML = `Network: <span>${count}</span> referral${count !== 1 ? 's' : ''} — <span>${getReferralMultiplier().toFixed(2)}x</span> income bonus`;
+  } else {
+    countEl.innerHTML = 'Share your code. Stack referrals. Ancient MLM arts.';
+  }
+}
+
+function copyReferralCode() {
+  navigator.clipboard.writeText(state.referralCode).then(() => {
+    toast('Referral code copied!');
+    playSFX('click');
+  }).catch(() => {});
+}
+
+// ============ CASINO BONUS MODE ============
+let casinoActive = false;
+let lastCasinoCheck = Date.now();
+const CASINO_MIN_INTERVAL = 180000; // minimum 3 minutes between popups
+const CASINO_CHANCE_PER_TICK = 0.0003; // ~1% per 33ms tick = roughly every 3-5 min
+
+function checkCasinoPopup() {
+  if (casinoActive) return;
+  if (state.cryptoLaunched) return;
+  if (state.cash < 100) return; // need something to bet
+  if (Date.now() - lastCasinoCheck < CASINO_MIN_INTERVAL) return;
+
+  if (Math.random() < CASINO_CHANCE_PER_TICK) {
+    showCasino();
+  }
+}
+
+function showCasino() {
+  casinoActive = true;
+  lastCasinoCheck = Date.now();
+  const stake = state.cash;
+  document.getElementById('casino-stake-amount').textContent = formatMoney(stake);
+  document.getElementById('casino-choices').style.display = '';
+  document.getElementById('casino-result').style.display = 'none';
+  document.getElementById('casino-overlay').classList.add('active');
+  playSFX('prestige');
+}
+
+function casinoBet(choice) {
+  const stake = state.cash;
+  // House edge: 47% chance to win (53% house)
+  const winChance = 0.47;
+  const result = Math.random() < winChance ? 'win' : 'lose';
+  // The ball lands on a color
+  const colors = ['red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'green']; // 18 red, 18 black-ish, 1 green (house)
+  let landed;
+  if (result === 'win') {
+    landed = choice; // they guessed right
+  } else {
+    landed = choice === 'red' ? 'black' : (Math.random() < 0.05 ? 'green' : 'red');
+  }
+
+  const resultEl = document.getElementById('casino-result');
+  document.getElementById('casino-choices').style.display = 'none';
+  resultEl.style.display = 'block';
+
+  if (result === 'win') {
+    state.cash *= 2;
+    state.totalEarned += stake;
+    state.totalAllTime += stake;
+    resultEl.className = 'win';
+    resultEl.innerHTML = `It lands on ${landed.toUpperCase()}!<br>YOU WIN ${formatMoney(stake)}`;
+    playSFX('escape');
+    log(`<span class="log-money">Casino: WON ${formatMoney(stake)}!</span> Landed on ${landed}.`);
+  } else {
+    state.cash = 0;
+    resultEl.className = 'lose';
+    resultEl.innerHTML = `It lands on ${landed.toUpperCase()}.<br>You lose ${formatMoney(stake)}.`;
+    playSFX('deny');
+    log(`Casino: Lost <span class="log-money">${formatMoney(stake)}</span>. ${landed === 'green' ? 'House green. Brutal.' : ''}`);
+  }
+
+  setTimeout(() => {
+    document.getElementById('casino-overlay').classList.remove('active');
+    casinoActive = false;
+  }, 2500);
+}
+
+function casinoSkip() {
+  document.getElementById('casino-overlay').classList.remove('active');
+  casinoActive = false;
+  log('Walked away from the table. Smart? Or weak?');
+}
+
+// ============ CRYPTO TOKEN LAUNCH ============
+function showCryptoModal() {
+  if (state.cryptoLaunched) return;
+  document.getElementById('crypto-overlay').classList.add('active');
+}
+
+function hideCryptoModal() {
+  document.getElementById('crypto-overlay').classList.remove('active');
+}
+
+function launchCryptoToken() {
+  state.cryptoLaunched = true;
+  state.cash *= 2; // double the cash
+  // Destroy everything
+  state.agents = {};
+  state.clickUpgrades = {};
+  state.clickMultiplier = 1;
+  state.clickValue = 0; // can't even click anymore
+
+  hideCryptoModal();
+  playSFX('escape');
+
+  // Show game over
+  document.getElementById('gameover-cash').textContent = formatMoney(state.cash);
+  document.getElementById('gameover-overlay').classList.add('active');
+
+  log('<span style="color:var(--neon-pink);font-weight:700">$COPE TOKEN LAUNCHED. Brand torched. All revenue streams destroyed.</span>');
+  toast('$COPE — Your brand is gone.');
+  save();
+  renderAll();
+}
+
+function closeGameOver() {
+  document.getElementById('gameover-overlay').classList.remove('active');
 }
 
 // ============ MILESTONES CHECK ============
@@ -1555,6 +2358,7 @@ function checkMilestones() {
       playSFX('milestone');
       log(`<span class="log-good">Milestone: ${m.name}!</span> ${m.reward}`);
       toast(`Milestone: ${m.name}!`);
+      renderMilestones();
 
       // $1T escape — generate NFT hash
       if (m.id === 'm8' && !state.escaped && !escapeTriggered) {
@@ -1605,17 +2409,19 @@ function renderStore() {
 }
 
 function renderClickUpgrades() {
+  if (state.cryptoLaunched) return; // no upgrades after crypto
   const el = document.getElementById('click-upgrade-list');
   el.innerHTML = '';
   for (const up of CLICK_UPGRADES) {
     if (state.clickUpgrades[up.id]) continue;
+    const cost = getUpgradeCost(up);
     const btn = document.createElement('button');
     btn.className = 'click-upgrade-btn';
-    btn.disabled = state.cash < up.cost;
+    btn.disabled = state.cash < cost;
     btn.onclick = () => buyClickUpgrade(up.id);
     btn.innerHTML = `
       <span class="name">${up.name}</span>
-      <span class="cost">${formatMoney(up.cost)}</span>
+      <span class="cost">${formatMoney(cost)}</span>
       <span class="desc">${up.desc}</span>
     `;
     el.appendChild(btn);
@@ -1629,10 +2435,20 @@ function renderMilestones() {
     const achieved = !!state.milestones[m.id];
     const div = document.createElement('div');
     div.className = 'milestone' + (achieved ? ' achieved' : '');
+
+    // Progress bar for unachieved milestones
+    let progressHTML = '';
+    if (!achieved) {
+      const progress = Math.min(1, state.totalAllTime / m.threshold);
+      const pct = (progress * 100).toFixed(1);
+      progressHTML = `<div class="m-progress-wrap"><div class="m-progress-bar" style="width:${pct}%"></div></div>`;
+    }
+
     div.innerHTML = `
       <div class="m-name">${achieved ? '✓ ' : ''}${m.name}</div>
       <div class="m-desc">${m.desc}</div>
       <div class="m-reward">${m.reward}</div>
+      ${progressHTML}
     `;
     el.appendChild(div);
   }
@@ -1642,7 +2458,9 @@ function renderAll() {
   renderStore();
   renderClickUpgrades();
   renderMilestones();
+  renderReferralPanel();
   updateOrbit();
+  updateFounderBadge();
 }
 
 function updateDisplay() {
@@ -1659,7 +2477,12 @@ function updateDisplay() {
 
   const gain = getPrestigeGain();
   const trigger = document.getElementById('prestige-trigger');
-  trigger.classList.toggle('visible', gain >= 1);
+  trigger.classList.toggle('visible', gain >= 1 && !state.cryptoLaunched);
+
+  // Crypto token trigger: visible after $10B total, not already launched
+  const cryptoTrigger = document.getElementById('crypto-trigger');
+  cryptoTrigger.classList.toggle('visible', state.totalAllTime >= 10_000_000_000 && !state.cryptoLaunched);
+
   if (state.vcRounds > 0) {
     document.getElementById('prestige-bar').classList.add('active');
     document.getElementById('vc-rounds').textContent = state.vcRounds;
@@ -1682,10 +2505,12 @@ function tick() {
   state.totalAllTime += earned;
 
   checkMilestones();
+  updateLockIn();
+  checkCasinoPopup();
   updateDisplay();
 }
 
-setInterval(() => { renderStore(); renderClickUpgrades(); }, 1000);
+setInterval(() => { renderStore(); renderClickUpgrades(); renderMilestones(); }, 1000);
 setInterval(tick, 33);
 
 // ============ SAVE / LOAD ============
@@ -1725,6 +2550,11 @@ function load() {
 
       // Restore escape state
       if (state.escaped) escapeTriggered = true;
+
+      // Ensure arrays exist for migrated saves
+      if (!state.referrals) state.referrals = [];
+      if (!state.lockInEnd) state.lockInEnd = 0;
+      if (!state.lastLockIn) state.lastLockIn = 0;
     }
   } catch (e) { /* corrupted save */ }
 }
