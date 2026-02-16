@@ -1478,6 +1478,142 @@
   }
   #founder-badge.active { display: block; }
 
+  /* Sell Company trigger button */
+  #sell-trigger {
+    display: none;
+    margin: 6px auto;
+    padding: 8px 18px;
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    background: rgba(0, 229, 255, 0.05);
+    color: var(--neon-cyan);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.25s;
+    animation: sellPulse 3s ease-in-out infinite;
+  }
+  #sell-trigger:hover { background: var(--neon-cyan); color: #000; }
+  #sell-trigger.visible { display: inline-block; }
+  @keyframes sellPulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.2); }
+  }
+
+  /* ===== ACQUISITION MODAL ===== */
+  #acquisition-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(30px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  #acquisition-overlay.active { display: flex; }
+  #acquisition-modal {
+    background: var(--surface-solid);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 520px;
+    text-align: center;
+    box-shadow: 0 0 120px rgba(0, 229, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  #acquisition-modal::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 22px;
+    background: conic-gradient(from 0deg, transparent 40%, var(--neon-cyan), transparent 60%);
+    animation: nftSpin 6s linear infinite;
+    z-index: -1;
+    opacity: 0.3;
+  }
+  #acquisition-modal h2 {
+    font-size: 24px;
+    color: var(--neon-cyan);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 30px rgba(0,229,255,0.3);
+  }
+  #acquisition-modal .acq-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  #acquisition-modal .acq-body {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.6;
+    text-align: left;
+  }
+  .acq-term-sheet {
+    background: rgba(0,229,255,0.03);
+    border: 1px solid rgba(0,229,255,0.1);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: left;
+  }
+  .acq-term-sheet h4 {
+    color: var(--neon-cyan);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .acq-term-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 12px;
+  }
+  .acq-term-row:last-child { border: none; }
+  .acq-term-label { color: var(--text-dim); }
+  .acq-term-value { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+  .acq-term-value.good { color: var(--accent); }
+  .acq-term-value.gold { color: var(--gold); }
+  .acq-term-value.bad { color: var(--red); }
+  .acq-warning {
+    font-size: 11px;
+    color: var(--gold);
+    background: rgba(255,208,0,0.05);
+    border: 1px solid rgba(255,208,0,0.15);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    line-height: 1.5;
+  }
+  .acq-btn {
+    padding: 12px 36px;
+    border: 1px solid rgba(0,229,255,0.3);
+    background: rgba(0,229,255,0.05);
+    color: var(--neon-cyan);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 6px;
+    transition: all 0.25s;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .acq-btn:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 30px rgba(0,229,255,0.3); }
+  .acq-btn.cancel { border-color: var(--glass-border); color: var(--text-dim); background: transparent; }
+  .acq-btn.cancel:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+
   /* Milestone progress bar */
   .milestone .m-progress-wrap {
     height: 3px;
@@ -1527,6 +1663,7 @@
 <div id="founder-badge">Second Time Founder — <span id="founder-bonus-text">costs reduced</span></div>
 
 <div id="prestige-bar">
+  <span class="prestige-label" id="prestige-gen-label" style="display:none">Gen <span id="prestige-gen">0</span> &mdash; <span id="prestige-mult" style="color:var(--neon-cyan);font-weight:600">1.0</span>x base &mdash; </span>
   <span class="prestige-label">VC Rounds: </span>
   <span class="prestige-count" id="vc-rounds">0</span>
   <span class="prestige-label"> &mdash; &times;<span id="vc-mult">1.0</span> income</span>
@@ -1579,6 +1716,7 @@
     </div>
     <button id="lockin-btn" onclick="doLockIn()">Lock In</button>
     <button id="prestige-trigger" onclick="showPrestige()">Check Inbox</button>
+    <button id="sell-trigger" onclick="showAcquisitionModal()">Sell Company</button>
     <button id="crypto-trigger" onclick="showCryptoModal()">Launch Token</button>
     <div id="click-upgrades">
       <h3>Distribution Channels</h3>
@@ -1662,6 +1800,21 @@
       <button class="casino-skip" onclick="casinoSkip()">walk away like a coward</button>
     </div>
     <div id="casino-result"></div>
+  </div>
+</div>
+
+<!-- Acquisition modal -->
+<div id="acquisition-overlay">
+  <div id="acquisition-modal">
+    <h2 id="acq-title">Acquisition Offer</h2>
+    <div class="acq-sub" id="acq-sub">THEY WANT TO BUY YOUR COMPANY</div>
+    <div class="acq-body" id="acq-body"></div>
+    <div class="acq-term-sheet" id="acq-term-sheet"></div>
+    <div class="acq-warning">This will reset your company. You'll start fresh as a Second Time Founder with permanent bonuses based on your exit.</div>
+    <div style="margin-top:16px">
+      <button class="acq-btn" onclick="acceptAcquisition()">Sell &amp; Start Over</button>
+      <button class="acq-btn cancel" onclick="hideAcquisitionModal()">Not Yet</button>
+    </div>
   </div>
 </div>
 
@@ -1943,6 +2096,10 @@ let state = {
   cryptoLaunched: false,
   vcEquityGiven: 0,
   vcDeclined: [],
+  // Prestige (persists across resets)
+  founderGeneration: 0,
+  prestigeMultiplier: 1,
+  exitHistory: [],
 };
 
 // ============ AGENT DEFINITIONS ============
@@ -2008,8 +2165,12 @@ function getVCMultiplier() {
   return 1 + state.vcPoints * 0.10;
 }
 
+function getPrestigeMultiplier() {
+  return state.prestigeMultiplier || 1;
+}
+
 function getClickValue() {
-  return state.clickValue * state.clickMultiplier * getMilestoneMultiplier() * getVCMultiplier() * getReferralMultiplier() * getLockInMultiplier();
+  return state.clickValue * state.clickMultiplier * getMilestoneMultiplier() * getVCMultiplier() * getReferralMultiplier() * getLockInMultiplier() * getPrestigeMultiplier();
 }
 
 function getMPS() {
@@ -2019,7 +2180,7 @@ function getMPS() {
     const owned = state.agents[agent.id] || 0;
     total += owned * agent.baseMps;
   }
-  return total * getMilestoneMultiplier() * getVCMultiplier() * getReferralMultiplier() * getLockInMultiplier();
+  return total * getMilestoneMultiplier() * getVCMultiplier() * getReferralMultiplier() * getLockInMultiplier() * getPrestigeMultiplier();
 }
 
 function getTotalAgents() {
@@ -2502,28 +2663,190 @@ function updateLockIn() {
   }
 }
 
-// ============ SECOND TIME FOUNDER ============
+// ============ SECOND TIME FOUNDER / PRESTIGE ============
 function getFounderCostDiscount() {
-  // Each VC round reduces costs by 5%, up to 50% max
-  if (state.vcRounds <= 0) return 1;
-  return Math.max(0.5, 1 - state.vcRounds * 0.05);
-}
-
-function getFounderStartBonus() {
-  // Second time founders start with cash based on rounds
-  return state.vcRounds * 1000;
+  // Gen 1+: 30% cost reduction, Gen 2+: 45%, Gen 3+: 55%, cap at 60%
+  const gen = state.founderGeneration || 0;
+  if (gen <= 0) return 1;
+  return Math.max(0.4, 1 - Math.min(gen * 0.15, 0.6));
 }
 
 function updateFounderBadge() {
   const badge = document.getElementById('founder-badge');
-  if (state.vcRounds >= 1) {
+  const gen = state.founderGeneration || 0;
+  if (gen >= 1) {
     badge.classList.add('active');
+    const genLabel = gen === 1 ? '2nd' : gen === 2 ? '3rd' : `${gen + 1}th`;
+    const mult = getPrestigeMultiplier().toFixed(1);
     const discount = Math.round((1 - getFounderCostDiscount()) * 100);
     document.getElementById('founder-bonus-text').textContent =
-      `${discount}% cheaper agents & upgrades`;
+      `Gen ${gen} — ${mult}x income — ${discount}% cheaper`;
   } else {
     badge.classList.remove('active');
   }
+}
+
+// ============ ACQUISITION / EXIT SYSTEM ============
+const ACQUIRERS = [
+  { name: 'Google', pitch: 'We\'re acquiring you for "talent" (we\'ll kill the product in 18 months).', flavor: 'Your app becomes a Google Labs experiment. It shuts down during the next reorg.' },
+  { name: 'Apple', pitch: 'We\'d like to integrate your technology into our ecosystem. You\'ll never be mentioned by name again.', flavor: 'Tim Cook shows a slide with your logo at WWDC. It\'s the last time anyone sees it.' },
+  { name: 'Microsoft', pitch: 'Satya personally approved this. We\'re adding your product to the Microsoft 365 suite. Nobody will find it.', flavor: 'Your product is now a tab inside a tab inside Teams.' },
+  { name: 'Meta', pitch: 'Mark saw your growth metrics and wants to "bring you into the family." His words, not ours.', flavor: 'Your app is renamed to something with "Meta" in front of it. Downloads drop 40%.' },
+  { name: 'Amazon', pitch: 'We noticed you\'re doing well in a market we haven\'t copied yet. Let\'s talk acquisition before we launch our own version.', flavor: 'Bezos sends you a single emoji: 📦' },
+  { name: 'Elon (personally)', pitch: 'Elon tweeted about your product at 3am. His lawyers are calling it a "strategic synergy with X/Tesla/SpaceX/xAI/Neuralink/The Boring Company."', flavor: 'Elon renames your product, fires 80% of the team, then calls it "the most efficient acquisition ever."' },
+];
+
+function getCompanyValuation() {
+  const mps = getMPS();
+  const arr = mps * 2592000 * 12;
+  // Valuation = 15x ARR + totalAllTime * 0.5 (goodwill/brand value)
+  return arr * 15 + state.totalAllTime * 0.5;
+}
+
+function getExitPayout() {
+  const valuation = getCompanyValuation();
+  const equityRetained = (100 - (state.vcEquityGiven || 0)) / 100;
+  return Math.floor(valuation * equityRetained);
+}
+
+function getExitPrestigeMultiplier() {
+  // The multiplier you'll earn from this exit
+  // Based on payout tiers — a solid first exit (~$50B valuation, ~70% equity) should give ~8-15x
+  const payout = getExitPayout();
+  if (payout <= 0) return 1;
+  // log scale: every 10x in payout roughly doubles the multiplier
+  // Base: $1B payout = 3x, $10B = 6x, $100B = 12x, $1T = 24x
+  const base = Math.log10(Math.max(payout, 1));
+  return Math.max(1, Math.round((base - 7) * 3 * 10) / 10); // $10M=1x, $1B=3x, $100B~=12x
+}
+
+function canSellCompany() {
+  // Need at least 1 VC round and $50B+ total earned
+  return state.vcRounds >= 1 && state.totalAllTime >= 50_000_000_000 && !state.cryptoLaunched;
+}
+
+function showAcquisitionModal() {
+  if (!canSellCompany()) return;
+  markPopupOpen();
+
+  // Pick a random acquirer
+  const acquirer = ACQUIRERS[Math.floor(Math.random() * ACQUIRERS.length)];
+  const valuation = getCompanyValuation();
+  const equityRetained = 100 - (state.vcEquityGiven || 0);
+  const payout = getExitPayout();
+  const newMult = getExitPrestigeMultiplier();
+  const currentMult = getPrestigeMultiplier();
+  const totalMult = currentMult * newMult;
+  const gen = (state.founderGeneration || 0) + 1;
+
+  document.getElementById('acq-title').textContent = `${acquirer.name} Wants to Buy You`;
+  document.getElementById('acq-sub').textContent = acquirer.flavor;
+  document.getElementById('acq-body').innerHTML = `<em>"${acquirer.pitch}"</em>`;
+
+  document.getElementById('acq-term-sheet').innerHTML = `
+    <h4>Acquisition Terms</h4>
+    <div class="acq-term-row">
+      <span class="acq-term-label">Company Valuation</span>
+      <span class="acq-term-value gold">${formatMoney(valuation)}</span>
+    </div>
+    <div class="acq-term-row">
+      <span class="acq-term-label">Your Equity</span>
+      <span class="acq-term-value" style="color:${equityRetained < 50 ? 'var(--red)' : 'var(--accent)'}">${equityRetained}%</span>
+    </div>
+    <div class="acq-term-row">
+      <span class="acq-term-label">Your Payout</span>
+      <span class="acq-term-value good">${formatMoney(payout)}</span>
+    </div>
+    <div class="acq-term-row" style="border-top:1px solid rgba(255,255,255,0.06);padding-top:10px;margin-top:4px">
+      <span class="acq-term-label">Permanent Income Multiplier</span>
+      <span class="acq-term-value gold">${currentMult.toFixed(1)}x → ${totalMult.toFixed(1)}x</span>
+    </div>
+    <div class="acq-term-row">
+      <span class="acq-term-label">Starting Cash (Next Run)</span>
+      <span class="acq-term-value good">${formatMoney(Math.floor(payout * 0.01))}</span>
+    </div>
+    <div class="acq-term-row">
+      <span class="acq-term-label">Founder Generation</span>
+      <span class="acq-term-value gold">Gen ${gen}</span>
+    </div>
+  `;
+
+  document.getElementById('acquisition-overlay').classList.add('active');
+}
+
+function hideAcquisitionModal() {
+  document.getElementById('acquisition-overlay').classList.remove('active');
+  showPopupEarnings();
+}
+
+function acceptAcquisition() {
+  const payout = getExitPayout();
+  const newMult = getExitPrestigeMultiplier();
+  const currentMult = getPrestigeMultiplier();
+  const startingCash = Math.floor(payout * 0.01); // 1% of exit as starting cash
+
+  // Record exit in history
+  if (!state.exitHistory) state.exitHistory = [];
+  state.exitHistory.push({
+    generation: (state.founderGeneration || 0) + 1,
+    payout: payout,
+    multiplierEarned: newMult,
+    totalEarned: state.totalAllTime,
+    vcRounds: state.vcRounds,
+    equityRetained: 100 - (state.vcEquityGiven || 0),
+    timestamp: Date.now(),
+  });
+
+  // Update persistent prestige state
+  state.founderGeneration = (state.founderGeneration || 0) + 1;
+  state.prestigeMultiplier = currentMult * newMult;
+
+  // Reset everything else
+  state.cash = startingCash;
+  state.totalEarned = startingCash;
+  state.totalAllTime = startingCash;
+  state.clickValue = 1;
+  state.clickMultiplier = 1;
+  state.agents = {};
+  state.clickUpgrades = {};
+  state.milestones = {};
+  state.vcPoints = 0;
+  state.vcRounds = 0;
+  state.vcEquityGiven = 0;
+  state.vcDeclined = [];
+  state.totalClicks = 0;
+  state.nftHash = null;
+  state.escaped = false;
+  state.lastLockIn = 0;
+  state.lockInEnd = 0;
+  state.referrals = [];
+  state.referralCode = null;
+  state.cryptoLaunched = false;
+
+  // Reset escape state
+  escapeTriggered = false;
+  vcInboxReady = false;
+  currentVCEmail = null;
+
+  // Close modal
+  document.getElementById('acquisition-overlay').classList.remove('active');
+
+  // Effects
+  playSFX('escape');
+
+  // Save and re-render everything
+  save();
+  renderAll();
+
+  // Log the new beginning
+  const gen = state.founderGeneration;
+  const genLabel = gen === 1 ? '2nd' : gen === 2 ? '3rd' : `${gen + 1}th`;
+  log(`<span style="color:var(--neon-cyan);font-weight:700">ACQUIRED. You cashed out ${formatMoney(payout)}.</span>`);
+  log(`<span style="color:var(--gold)">Welcome back, ${genLabel} Time Founder.</span> Your reputation precedes you.`);
+  log(`Permanent income: <span class="log-good">${state.prestigeMultiplier.toFixed(1)}x</span> | Starting cash: <span class="log-money">${formatMoney(startingCash)}</span>`);
+  log('Post content. Expand distribution. Hire agents. Reach <span class="log-money">$1T</span> to escape.');
+
+  toast(`Generation ${gen} — ${state.prestigeMultiplier.toFixed(1)}x income`);
 }
 
 // ============ REFERRAL SYSTEM ============
@@ -2807,8 +3130,8 @@ function renderStore() {
     if (!locked) card.onclick = () => buyAgent(agent.id);
 
     const production = owned > 0
-      ? `producing ${formatMoney(owned * agent.baseMps * getMilestoneMultiplier() * getVCMultiplier())}/s`
-      : `each: ${formatMoney(agent.baseMps * getMilestoneMultiplier() * getVCMultiplier())}/s`;
+      ? `producing ${formatMoney(owned * agent.baseMps * getMilestoneMultiplier() * getVCMultiplier() * getPrestigeMultiplier())}/s`
+      : `each: ${formatMoney(agent.baseMps * getMilestoneMultiplier() * getVCMultiplier() * getPrestigeMultiplier())}/s`;
 
     card.innerHTML = `
       <div class="agent-icon" style="background:${agent.iconBg}">${locked ? '🔒' : agent.icon}</div>
@@ -2898,15 +3221,27 @@ function updateDisplay() {
   const trigger = document.getElementById('prestige-trigger');
   trigger.classList.toggle('visible', vcInboxReady && !state.cryptoLaunched);
 
+  // Sell Company trigger: visible when eligible
+  const sellTrigger = document.getElementById('sell-trigger');
+  sellTrigger.classList.toggle('visible', canSellCompany());
+
   // Crypto token trigger: visible after $10B total, not already launched
   const cryptoTrigger = document.getElementById('crypto-trigger');
   cryptoTrigger.classList.toggle('visible', state.totalAllTime >= 10_000_000_000 && !state.cryptoLaunched);
 
-  if (state.vcRounds > 0) {
+  if (state.vcRounds > 0 || (state.founderGeneration || 0) > 0) {
     document.getElementById('prestige-bar').classList.add('active');
     document.getElementById('vc-rounds').textContent = state.vcRounds;
     document.getElementById('vc-mult').textContent = getVCMultiplier().toFixed(1);
     document.getElementById('vc-equity').textContent = (100 - (state.vcEquityGiven || 0)) + '%';
+  }
+  // Show prestige generation info
+  const gen = state.founderGeneration || 0;
+  const genLabel = document.getElementById('prestige-gen-label');
+  if (gen > 0) {
+    genLabel.style.display = 'inline';
+    document.getElementById('prestige-gen').textContent = gen;
+    document.getElementById('prestige-mult').textContent = getPrestigeMultiplier().toFixed(1);
   }
 }
 
@@ -2977,6 +3312,9 @@ function load() {
       if (!state.lastLockIn) state.lastLockIn = 0;
       if (!state.vcEquityGiven) state.vcEquityGiven = 0;
       if (!state.vcDeclined) state.vcDeclined = [];
+      if (!state.founderGeneration) state.founderGeneration = 0;
+      if (!state.prestigeMultiplier) state.prestigeMultiplier = 1;
+      if (!state.exitHistory) state.exitHistory = [];
     }
   } catch (e) { /* corrupted save */ }
 }
@@ -3023,6 +3361,11 @@ window.addEventListener('beforeunload', save);
 load();
 renderAll();
 log('Welcome to <span class="log-good">Escape the Underclass</span>.');
+if ((state.founderGeneration || 0) > 0) {
+  const gen = state.founderGeneration;
+  const genLabel = gen === 1 ? '2nd' : gen === 2 ? '3rd' : `${gen + 1}th`;
+  log(`<span style="color:var(--neon-cyan)">${genLabel} Time Founder</span> — ${getPrestigeMultiplier().toFixed(1)}x permanent income.`);
+}
 log('Post content. Expand distribution. Hire agents. Reach <span class="log-money">$1T</span> to escape.');
 
 // If player already has escape hash, show option to view it
