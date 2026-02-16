@@ -3369,6 +3369,7 @@ function confirmNewGame() {
   if (!confirm('Start a completely new game? This will erase ALL progress — including prestige. There is no undo.')) return;
   if (!confirm('Seriously. Everything gone. Are you sure?')) return;
   localStorage.removeItem(SAVE_KEY);
+  window.removeEventListener('beforeunload', save);
   location.reload();
 }
 
