@@ -10,7 +10,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #0a0a0a;
+    --bg: #0b0a09;
     --surface: #111111;
     --surface-solid: #141414;
     --surface2: #1a1a1a;
@@ -599,8 +599,74 @@
     line-height: 1.8;
   }
   #log .log-entry { margin-bottom: 2px; }
+  #log .log-entry::before { content: '> '; color: var(--text-muted); }
   #log .log-money { color: var(--gold); }
   #log .log-good { color: var(--accent); }
+
+  /* ===== INTRO OVERLAY ===== */
+  #intro-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  #intro-overlay.active { display: flex; }
+  #intro-modal {
+    max-width: 440px;
+    padding: 48px 40px 36px;
+    text-align: center;
+  }
+  #intro-modal .intro-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+  }
+  #intro-modal .intro-narrative {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  #intro-modal .intro-tagline {
+    font-size: 10px;
+    color: var(--accent-dim);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  #intro-modal .intro-cta {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+  #intro-modal .intro-begin {
+    padding: 12px 48px;
+    border: 1px solid var(--accent-dim);
+    background: transparent;
+    color: var(--accent);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.25s;
+  }
+  #intro-modal .intro-begin:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
 
   /* ===== PRESTIGE MODAL ===== */
   #prestige-overlay {
@@ -2000,10 +2066,25 @@
 <!-- Save indicator -->
 <div id="save-indicator">
   <span id="save-status">auto-saved</span>
-  <button class="save-btn" onclick="manualSave()">SAVE</button>
+  <button class="save-btn" onclick="manualSave()">ALT+TAB</button>
   <button class="save-btn" onclick="exportSave()">EXPORT</button>
   <button class="save-btn" onclick="importSave()">IMPORT</button>
   <button class="save-btn" style="color:var(--red);border-color:rgba(255,50,50,0.15)" onclick="confirmNewGame()">NEW GAME</button>
+</div>
+
+<!-- Intro overlay (first visit only) -->
+<div id="intro-overlay">
+  <div id="intro-modal">
+    <div class="intro-time">2:47 PM — TUESDAY</div>
+    <div class="intro-narrative">
+      Your Jira board has 14 unresolved tickets.<br>
+      Your manager is in a meeting until 3.<br><br>
+      You have a window.
+    </div>
+    <div class="intro-tagline">Building an empire on company time</div>
+    <div class="intro-cta">Post Content &middot; Build Distribution &middot; Stack ARR &middot; Get Out</div>
+    <button class="intro-begin" onclick="dismissIntro()">Begin</button>
+  </div>
 </div>
 
 <div id="app">
@@ -3946,6 +4027,15 @@ if (state.lastSaved) {
       setTimeout(() => showWelcomeBack(offlineEarned, cappedSeconds), 500);
     }
   }
+}
+
+// ============ INTRO POPUP ============
+function dismissIntro() {
+  document.getElementById('intro-overlay').classList.remove('active');
+  localStorage.setItem('etu_intro_seen', '1');
+}
+if (!localStorage.getItem('etu_intro_seen')) {
+  document.getElementById('intro-overlay').classList.add('active');
 }
 
 renderAll();
