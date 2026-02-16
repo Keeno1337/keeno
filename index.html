@@ -830,6 +830,10 @@
 
 <div id="stats-bar">
   <div class="stat">
+    <div class="stat-label">Cash</div>
+    <div class="stat-value" id="cash-display">$0</div>
+  </div>
+  <div class="stat">
     <div class="stat-label">MRR</div>
     <div class="stat-value" id="mrr-display">$0</div>
   </div>
@@ -846,7 +850,7 @@
     <div class="stat-value" id="total-display">$0</div>
   </div>
   <div class="stat">
-    <div class="stat-label">Agents</div>
+    <div class="stat-label">Agents Deployed</div>
     <div class="stat-value" id="agents-display">0</div>
   </div>
 </div>
@@ -854,13 +858,13 @@
 <div id="main">
   <div id="click-panel">
     <div class="deploy-container">
-      <div class="click-indicator" id="click-indicator">Click to Deploy</div>
+      <div class="click-indicator" id="click-indicator">Click to Ship</div>
       <div class="deploy-ring"></div>
       <div class="deploy-ring"></div>
       <div class="deploy-ring"></div>
       <div id="deploy-btn" onclick="handleClick(event)">
-        <span class="icon">🤖</span>
-        <span class="label">Deploy</span>
+        <span class="icon">🚀</span>
+        <span class="label">Ship App</span>
         <span class="amount" id="click-value">+$1</span>
       </div>
     </div>
@@ -894,7 +898,7 @@
 <div id="prestige-overlay">
   <div id="prestige-modal">
     <h2>Raise a VC Round</h2>
-    <p>Cash out your ARR to attract venture capital. You'll lose all agents and MRR, but gain permanent income multipliers.</p>
+    <p>Cash out to attract venture capital. You'll lose all cash, agents, and upgrades, but gain permanent income multipliers.</p>
     <div class="prestige-info">You'll gain <span id="prestige-gain">0</span> VC points</div>
     <p>Each VC point gives +10% to all income. Current multiplier: &times;<span id="prestige-current-mult">1.0</span></p>
     <div>
@@ -1135,7 +1139,7 @@ drawParticles();
 
 // ============ GAME STATE ============
 let state = {
-  mrr: 0,
+  cash: 0,
   totalEarned: 0,
   totalAllTime: 0,
   clickValue: 1,
@@ -1301,7 +1305,7 @@ let clickIndicatorHidden = false;
 
 function handleClick(e) {
   const value = getClickValue();
-  state.mrr += value;
+  state.cash += value;
   state.totalEarned += value;
   state.totalAllTime += value;
   state.totalClicks = (state.totalClicks || 0) + 1;
@@ -1331,10 +1335,10 @@ function buyAgent(agentId) {
   const agent = AGENTS.find(a => a.id === agentId);
   if (!agent) return;
   const cost = getAgentCost(agent);
-  if (state.mrr < cost) { playSFX('deny'); return; }
+  if (state.cash < cost) { playSFX('deny'); return; }
   if (state.totalAllTime < agent.unlockAt) return;
 
-  state.mrr -= cost;
+  state.cash -= cost;
   state.agents[agent.id] = (state.agents[agent.id] || 0) + 1;
   playSFX('buy');
   log(`Deployed <span class="log-good">${agent.name}</span> #${state.agents[agent.id]} for <span class="log-money">${formatMoney(cost)}</span>`);
@@ -1345,9 +1349,9 @@ function buyAgent(agentId) {
 function buyClickUpgrade(upId) {
   const up = CLICK_UPGRADES.find(u => u.id === upId);
   if (!up || state.clickUpgrades[upId]) return;
-  if (state.mrr < up.cost) { playSFX('deny'); return; }
+  if (state.cash < up.cost) { playSFX('deny'); return; }
 
-  state.mrr -= up.cost;
+  state.cash -= up.cost;
   state.clickUpgrades[upId] = true;
   state.clickMultiplier *= up.multiplier;
   playSFX('upgrade');
@@ -1377,7 +1381,7 @@ function doPrestige() {
 
   state.vcPoints += gain;
   state.vcRounds++;
-  state.mrr = 0;
+  state.cash = 0;
   state.totalEarned = 0;
   state.clickValue = 1;
   state.clickMultiplier = 1;
@@ -1424,7 +1428,7 @@ function renderStore() {
     const cost = getAgentCost(agent);
     const owned = state.agents[agent.id] || 0;
     const locked = state.totalAllTime < agent.unlockAt;
-    const canBuy = state.mrr >= cost && !locked;
+    const canBuy = state.cash >= cost && !locked;
 
     const card = document.createElement('div');
     card.className = 'agent-card' + (locked ? ' locked' : '');
@@ -1457,7 +1461,7 @@ function renderClickUpgrades() {
     if (state.clickUpgrades[up.id]) continue;
     const btn = document.createElement('button');
     btn.className = 'click-upgrade-btn';
-    btn.disabled = state.mrr < up.cost;
+    btn.disabled = state.cash < up.cost;
     btn.onclick = () => buyClickUpgrade(up.id);
     btn.innerHTML = `
       <span class="name">${up.name}</span>
@@ -1492,8 +1496,11 @@ function renderAll() {
 
 function updateDisplay() {
   const mps = getMPS();
-  document.getElementById('mrr-display').textContent = formatMoney(state.mrr);
-  document.getElementById('arr-display').textContent = formatMoney(state.mrr * 12);
+  const mrr = mps * 2592000; // $/sec × 30 days
+  const arr = mrr * 12;
+  document.getElementById('cash-display').textContent = formatMoney(state.cash);
+  document.getElementById('mrr-display').textContent = formatMoney(mrr);
+  document.getElementById('arr-display').textContent = formatMoney(arr);
   document.getElementById('dps-display').textContent = formatMoney(mps);
   document.getElementById('total-display').textContent = formatMoney(state.totalAllTime);
   document.getElementById('agents-display').textContent = getTotalAgents();
@@ -1519,7 +1526,7 @@ function tick() {
 
   const mps = getMPS();
   const earned = mps * dt;
-  state.mrr += earned;
+  state.cash += earned;
   state.totalEarned += earned;
   state.totalAllTime += earned;
 
@@ -1551,6 +1558,11 @@ function load() {
     const data = localStorage.getItem(SAVE_KEY);
     if (data) {
       const parsed = JSON.parse(data);
+      // Migrate old saves that used 'mrr' as balance
+      if (parsed.mrr !== undefined && parsed.cash === undefined) {
+        parsed.cash = parsed.mrr;
+        delete parsed.mrr;
+      }
       state = { ...state, ...parsed };
       log('<span class="log-good">Progress restored.</span>');
 
@@ -1608,7 +1620,7 @@ window.addEventListener('beforeunload', save);
 load();
 renderAll();
 log('Welcome to <span class="log-good">Escape the Underclass</span>.');
-log('Deploy agents. Stack ARR. Reach <span class="log-money">$1T</span> to escape.');
+log('Ship apps. Hire agents. Stack ARR. Reach <span class="log-money">$1T</span> to escape.');
 
 // If player already has NFT hash, show option to view it
 if (state.nftHash) {
