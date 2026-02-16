@@ -3101,10 +3101,21 @@ function checkMilestones() {
       toast(`Milestone: ${m.name}!`);
       renderMilestones();
 
+      // Bootstrapper nod — no VC money, pure grind
+      if (m.id === 'm7' && state.vcRounds === 0) {
+        log('<span style="color:var(--neon-cyan)">No VCs. No dilution. 100% yours.</span> You realized the power was in your hands the whole time.');
+        toast('Bootstrapped to Unicorn. Respect.');
+      }
+
       // $1T escape — generate escape hash
       if (m.id === 'm8' && !state.escaped && !escapeTriggered) {
         escapeTriggered = true;
         state.escaped = true;
+
+        if (state.vcRounds === 0) {
+          log('<span style="color:var(--gold);font-weight:700">$1T with zero outside money. You never needed them.</span>');
+        }
+
         generateEscapeHash().then(hash => {
           state.nftHash = hash;
           save();
