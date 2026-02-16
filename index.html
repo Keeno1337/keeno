@@ -2253,6 +2253,7 @@
 <script>
 // ============ SOUND FX (Web Audio API) ============
 let sfxEnabled = true;
+let clickSfxIndex = 0;
 let audioCtx = null;
 
 function getAudioCtx() {
@@ -2279,16 +2280,21 @@ function playSFX(type) {
     const now = ctx.currentTime;
 
     switch (type) {
-      case 'click':
-        // Subtle, satisfying click — short high-freq tick
+      case 'click': {
+        // Undulating click — walks up/down a pentatonic scale
+        const scale = [1, 1.125, 1.25, 1.333, 1.5, 1.667, 1.5, 1.333, 1.25, 1.125];
+        const baseFreq = 900;
+        const freq = baseFreq * scale[clickSfxIndex % scale.length];
+        clickSfxIndex++;
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(1200, now);
-        osc.frequency.exponentialRampToValueAtTime(800, now + 0.03);
-        gain.gain.setValueAtTime(0.06, now);
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.7, now + 0.03);
+        gain.gain.setValueAtTime(0.07, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
         osc.start(now);
         osc.stop(now + 0.06);
         break;
+      }
 
       case 'buy':
         osc.type = 'triangle';
