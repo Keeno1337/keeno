@@ -2279,47 +2279,16 @@ function playSFX(type) {
     const now = ctx.currentTime;
 
     switch (type) {
-      case 'click': {
-        // Hitmarker thud — punchy low-mid hit with sharp transient
+      case 'click':
+        // Subtle, satisfying click — short high-freq tick
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(60, now + 0.08);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.03);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
         osc.start(now);
-        osc.stop(now + 0.12);
-        // Layer: sharp click transient
-        const clickOsc = ctx.createOscillator();
-        const clickGain = ctx.createGain();
-        clickOsc.connect(clickGain);
-        clickGain.connect(ctx.destination);
-        clickOsc.type = 'square';
-        clickOsc.frequency.setValueAtTime(1800, now);
-        clickOsc.frequency.exponentialRampToValueAtTime(400, now + 0.02);
-        clickGain.gain.setValueAtTime(0.12, now);
-        clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-        clickOsc.start(now);
-        clickOsc.stop(now + 0.04);
-        // Layer: noise burst for thud texture
-        const bufSize = ctx.sampleRate * 0.05;
-        const noiseBuf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
-        const data = noiseBuf.getChannelData(0);
-        for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / bufSize);
-        const noise = ctx.createBufferSource();
-        const noiseGain = ctx.createGain();
-        const noiseFilter = ctx.createBiquadFilter();
-        noise.buffer = noiseBuf;
-        noiseFilter.type = 'lowpass';
-        noiseFilter.frequency.setValueAtTime(800, now);
-        noise.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noiseGain.connect(ctx.destination);
-        noiseGain.gain.setValueAtTime(0.08, now);
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-        noise.start(now);
-        noise.stop(now + 0.05);
+        osc.stop(now + 0.06);
         break;
-      }
 
       case 'buy':
         osc.type = 'triangle';
