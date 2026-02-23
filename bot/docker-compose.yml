@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     vca
+      POSTGRES_PASSWORD: vca_password
+      POSTGRES_DB:       vibe_code_arena
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U vca -d vibe_code_arena']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  scoring-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.scoring
+    restart: unless-stopped
+    environment:
+      ANTHROPIC_API_KEY:    ${ANTHROPIC_API_KEY}
+      SCORING_SERVICE_PORT: 3001
+    ports:
+      - '3001:3001'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    restart: unless-stopped
+    environment:
+      DISCORD_TOKEN:        ${DISCORD_TOKEN}
+      DISCORD_CLIENT_ID:    ${DISCORD_CLIENT_ID}
+      DATABASE_URL:         postgresql://vca:vca_password@postgres:5432/vibe_code_arena
+      ANTHROPIC_API_KEY:    ${ANTHROPIC_API_KEY}
+      SCORING_SERVICE_URL:  http://scoring-service:3001
+    depends_on:
+      postgres:
+        condition: service_healthy
+      scoring-service:
+        condition: service_started
+
+volumes:
+  pgdata:
